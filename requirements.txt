@@ -1,0 +1,3 @@
+# run "pip install -r requirements.txt" to install the following libraries/modules required for this project
+
+flask
