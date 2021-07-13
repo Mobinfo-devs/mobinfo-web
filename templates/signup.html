@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block main_body %}
+<h1> SIGN UP </h1>
+
+<form action="/signup" method="GET">
+    <input autocomplete="off" name="firstname" placeholder="First Name" type="text" maxlength="30">
+    <input type="submit">
+</form>
+{% endblock %}

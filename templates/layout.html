@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <title>Mobinfo</title>
+  </head>
+  <body>
+    <header>
+        <h1> Mobinfo </h1>
+        <ul>
+            <li> <a class="/" href="main.html">Home</a> </li>
+            <li> <a href="/">History</a> </li>
+            <li> <a href="/" >Contact Us</a> </li>
+            <li> <a href="/">Contact Us</a> </li>
+            <li> <a href="/signup">Signup</a> </li>
+        </ul>
+    </header>
+
+    {% block main_body %} {% endblock %}
+
+  </body>
+</html>
