@@ -1,10 +1,39 @@
 {% extends "layout.html" %}
 
 {% block main_body %}
+<style>
+    form
+    {
+        padding: 10px;
+    }
+    input
+    {
+        background-color:  hsla(174, 60%, 34%, 0.219);
+        border: 2px solid hsl(174, 60%, 34%);
+        border-radius: 3px;
+    }
+    input[type="text"], input[type="password"]
+    {
+        width: 30%;
+        height: 1.25em;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+    input[type="submit"]
+    {
+        padding: 1.2em;
+    }
+</style>
 <h1> SIGN UP </h1>
 
 <form action="/signup" method="GET">
-    <input autocomplete="off" name="firstname" placeholder="First Name" type="text" maxlength="30">
-    <input type="submit">
+    <input autocomplete="off" name="firstname" placeholder="First Name" type="text" maxlength="30" required> <br>
+    <input autocomplete="off" name="lastname" placeholder="Last Name" type="text" maxlength="30" required> <br>
+    <input autocomplete="off" name="username" placeholder="User Name" type="text" maxlength="20" required> <br>
+    <input autocomplete="off" name="password" placeholder="Password" type="password" maxlength="255" required> <br>
+    <input autocomplete="off" name="password2" placeholder="Confirm password" type="password" maxlength="255" required>
+    <br><br>
+    <br><br>
+    <input type="submit" value="Sign Up">
 </form>
 {% endblock %}
