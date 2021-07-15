@@ -5,27 +5,31 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    <title>Mobinfo</title>
+    
+    {% block head %} {% endblock%}
+    
+    <title>{{ title }}</title>
   </head>
   <body>
     <header>
       <div class="site-name">
-        <a href="#"> <h1> Mobinfo </h1> </a>
+        <a href="/"> <h1> Mobinfo </h1> </a>
       </div>
       <hr>
       <div class="navbar">
         <ul>
-          <li> <a href="/">Home</a> </li>
-          <li> <a href="/">History</a> </li>
-          <li> <a href="/" >Contact Us</a> </li>
-          <li> <a href="/">Contact Us</a> </li>
-          <li> <a href="/signup">Signup</a> </li>
+          <li> <a href="/"> Home </a> </li>
+          <li> <a href="/"> Brands </a> </li>
+          <li> <a href="/" > Phones </li>
+          <li> <a href="/"> News </a> </li>
+          <li> <a href="/signup"> Sign Up </a> </li>
+          <li> <a href="/signin"> Sign In </a> </li>
       </ul>
       </div>
         
     </header>
 
-    {% block main_body %} {% endblock %}
+    {% block body %} {% endblock %}
 
   </body>
 </html>
