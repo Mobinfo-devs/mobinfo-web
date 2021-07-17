@@ -2,9 +2,11 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def index():
     return render_template("index.html", title="Mobinfo")
+
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -14,6 +16,7 @@ def signup():
         pass
         # TODO: Write signup logic
 
+
 @app.route("/signin", methods=["GET", "POST"])
 def signin():
     if request.method == "GET":
@@ -22,10 +25,10 @@ def signin():
         pass
         # TODO: Write signup logic
 
+
 @app.route("/brands")
 def brands():
     return render_template("brands.html")
-
 
 
 app.run(debug=True)

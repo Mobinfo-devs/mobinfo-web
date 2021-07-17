@@ -1,17 +1,22 @@
 {% extends "layout.html" %}
- 
+
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='auth.css') }}">
 {% endblock %}
 
 {% block body %}
-<h1> Sign In </h1>
+<div class="wrapper ">
+    <div id="formContent">
+        <h2> Sign In </h2>
 
-<form action="/signup" method="GET">
-    <input autocomplete="off" name="username" placeholder="User Name" type="text" maxlength="20" required> <br>
-    <input autocomplete="off" name="password" placeholder="Password" type="password" maxlength="255" required> <br>
-    <br><br>
-    <br><br>
-    <input type="submit" value="Sign Up">
-</form>
+        <form action="/signup" method="GET">
+            <input autocomplete="off" name="username" placeholder="Username" type="text" maxlength="20" required>
+            <input autocomplete="off" name="password" placeholder="Password" type="text" maxlength="255" required>
+            <br><br>
+            <input type="submit" value="Sign Up">
+        </form>
+    </div>
+</div>
+
+
 {% endblock %}

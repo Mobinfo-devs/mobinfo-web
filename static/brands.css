@@ -32,7 +32,7 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0 0  5px white;
-    border-radius: 10px;
+    border-radius: 5px;
     margin: 0.5em;
  }
  
@@ -50,19 +50,9 @@
  }
 
  .brands-grid {
-    margin-right: 10px;
-    margin-left: 10px;
+    margin-right: 30px;
+    margin-left: 30px;
     display: grid;
-    gap: 1rem; 
-     /* 1 too sk inny, too much code */
-    /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; */
-    
-    /* 2 cleaner code */
-    /* grid-template-columns: repeat(5, 1fr); */
-  
-    /* 3  better sizing, but overflows */
-    /* grid-template-columns: repeat(5, minmax(240px, 1fr)); */
-  
-    /* 4 final */
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 3rem;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
  }

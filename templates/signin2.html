@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+ 
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='auth2css') }}">
+{% endblock %}
+
+{% block body %}
+<h1> Sign In </h1>
+
+<form action="/signup" method="GET">
+    <input autocomplete="off" name="username" placeholder="User Name" type="text" maxlength="20" required> <br>
+    <input autocomplete="off" name="password" placeholder="Password" type="password" maxlength="255" required> <br>
+    <br><br>
+    <br><br>
+    <input type="submit" value="Sign Up">
+</form>
+{% endblock %}
