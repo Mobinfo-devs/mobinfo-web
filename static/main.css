@@ -3,25 +3,24 @@
     padding: 0; */
     font-family: sans-serif;
 }
+
 header{
-    background-color: hsl(194, 60%, 34%);;
+    background-color: hsl(194, 60%, 34%);
     /* height: 75px; */
     /* display: flex; */
     /* align-items: center; */
     border-radius: 5px;
     padding: 5px;
-
 }
 
 
 header ul{
     display: flex;
-    list-style: none;
-    text-align: center;
     justify-content: center;
     align-items: center;
 }
 header li{
+    display: inline;
     margin-left: 20px;
     margin-right: 20px;
 }
@@ -37,39 +36,19 @@ header h1{
     margin-left: 10px;
     margin-right: 20px;
 }
-/* .icecream{
-    display: flex;
-    background-image: url(/images/icecream-blur.jpg);
-} */
 
-.icecream div{
-    margin: auto;
-    text-align: center;
-    background-color: white;
-    border: 1px solid cadetblue;
-    border-radius: 5px;
-}
 footer{
-    background-color: black;
-    height: 75px;
+    background-color: hsl(194, 60%, 34%);
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
     color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    margin: 4px 3px;
-    
+    text-align: center;
+    border-radius: 5%;
+    margin-top: 2em;
 }
 
 
 .site-name
 {
-    width: 100%;
     text-align: center;
-}
-
-.navbar
-{
-    width: 100%;
-    align-items: center;
-}
+} 

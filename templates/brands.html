@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='brands.css') }}">
+{% endblock %}
+
+
+{% block body %}
+<h1> Brands </h1>
+
+<section class="brands-grid">
+    <div class="brandcard">
+         <h3> Xiaomi </h3> 
+         <div class=brandcardimage>
+            <img src="https://logos-download.com/wp-content/uploads/2016/05/Xiaomi_Logo_2021.svg">
+         </div>
+         
+    </div>
+
+    <div class="brandcard">
+        <h3> Samsung </h3> 
+        <div class=brandcardimage>
+            <img src="https://logos-download.com/wp-content/uploads/2016/02/Samsung_Logo_2005.svg">
+         </div>
+   </div>
+
+   <div class="brandcard">
+    <h3> Apple </h3> 
+    <div class=brandcardimage>
+       <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg">
+    </div>
+    
+</div>
+
+<div class="brandcard">
+   <h3> Samsung </h3> 
+   <div class=brandcardimage>
+       <img src="https://logos-download.com/wp-content/uploads/2016/02/Samsung_Logo_2005.svg">
+    </div>
+</div>
+
+<div class="brandcard">
+    <h3> Xiaomi </h3> 
+    <div class=brandcardimage>
+       <img src="https://logos-download.com/wp-content/uploads/2016/05/Xiaomi_Logo_2021.svg">
+    </div>
+
+   
+
+</section>
+{% endblock %}
+
+<!-- https://logos-download.com/6609-xiaomi-logo-download.html -->

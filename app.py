@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("layout.html", title="Mobinfo")
+    return render_template("index.html", title="Mobinfo")
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -22,6 +22,9 @@ def signin():
         pass
         # TODO: Write signup logic
 
+@app.route("/brands")
+def brands():
+    return render_template("brands.html")
 
 
 
