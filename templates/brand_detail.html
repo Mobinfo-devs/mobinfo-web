@@ -1,7 +1,45 @@
 {% extends "layout.html" %}
 
+{% block head %}
+<style>
+    .brand_details
+    {
+        margin-right: 3em;
+        margin-left: 3em;
+    }
+    .brand_details p
+    {
+        margin-left: 5em;
+        margin-right: 5em;
+        text-align: justify;
+    }
+
+    .brand_image
+    {
+        height: 390px;
+                background: hsla(150, 60%, 34%, 0.199);
+        position: relative;
+        border-radius: 5px;
+    }
+    .brand_image img
+    {
+        /* background: hsla(150, 60%, 34%, 0.1); */
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%,-50%);
+        border-radius: 5px;
+    }
+</style>
+
+{% endblock %}
+
 {% block body %}
-<h1> {{ brand_name }} </h1>
-<img src= {{ brand_logo_url }} style="width: 300px;">
-<p> {{ brand_description }} </p>
+<div class="brand_details">
+    <h1> {{ brand_name }} </h1>
+    <div class="brand_image">
+        <img src= {{ brand_logo_url }} style="width: 300px;">
+    </div>
+    <p> {{ brand_description }} </p>
+</div>
+
 {% endblock %}

@@ -50,6 +50,7 @@ def brands():
 
     return render_template("brands.html", brands=brands)
 
+
 @app.route("/brands/<brand_name>")
 def specific_brand(brand_name):
     db.execute(f"""
@@ -57,7 +58,6 @@ def specific_brand(brand_name):
     WHERE name = %s;
     """, (brand_name, ))
     db_result = db.fetchone()
-    print(db_result)
     
     if not db_result:
         return "Brand not found."
