@@ -1,35 +1,28 @@
-{% from 'layout.html' import component_edit  %}
-
 {% extends "layout.html" %}
 
 {% block head %}
-<!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static',  filename='auth.css') }}"> -->
 {% endblock %}
 
 {% block body %}
-    <h1> Edit Brand Details ({{ brand_name }}) </h1>
-    <div class="wrapper ">
-        <div id="formContent">
-            <h2> Edit </h2>
-    
-            <form action="{{ '/edit/brand/'+brand_name }}" method="POST">
-                <label for="brand_name">Brand Name: </label> <br>
-                <textarea name="brand_name" cols="100" rows="1">{{ brand_name }}</textarea>
-                <br> <br>
+<h1> Edit Brand Details ({{ brand_name }}) </h1>
+<h2> Edit </h2>
 
-                <label for="brand_description">Brand Details: </label> <br>
-                <textarea name="brand_description" cols="100" rows="20">{{ brand_description }}</textarea>
-                <br> <br>
+<form action="{{ '/brands/'+ brand_name + "/edit" }}" method="POST">
+    <label for="brand_name">Brand Name: </label> <br>
+    <textarea name="brand_name" cols="100" rows="1">{{ brand_name }}</textarea>
+    <br> <br>
 
-                <label for="brand_logo_url">Brand Logo Url: </label> <br>
-                <textarea name="brand_logo_url" cols="100" rows="1">{{ brand_logo_url }}</textarea>
-                <br> <br> 
-                
-                <br><br>
-                <input type="submit" value="Save Details">
-            </form>  
-        </div>
-    </div>
+    <label for="brand_description">Brand Details: </label> <br>
+    <textarea name="brand_description" cols="100" rows="20">{{ brand_description }}</textarea>
+    <br> <br>
+
+    <label for="brand_logo_url">Brand Logo Url: </label> <br>
+    <textarea name="brand_logo_url" cols="100" rows="1">{{ brand_logo_url }}</textarea>
+    <br> <br>
+
+    <br><br>
+    <input type="submit" value="Save Details">
+</form>
 
 </div>
 {% endblock %}
