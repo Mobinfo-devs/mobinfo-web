@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request
 from os import getenv
 import mysql.connector
+from mysql.connector.constants import RefreshOption
+from werkzeug.utils import redirect
+from helper import get_brand_details
+
+
 db_connection = mysql.connector.connect(
     host = "localhost",
     user = "root",
@@ -11,6 +16,10 @@ db_connection = mysql.connector.connect(
 db = db_connection.cursor()
 
 app = Flask(__name__)
+app.config.update(
+    DEBUG=True,
+    TEMPLATES_AUTO_RELOAD=True
+)
 
 
 @app.route("/")
@@ -53,16 +62,35 @@ def brands():
 
 @app.route("/brands/<brand_name>")
 def specific_brand(brand_name):
-    db.execute(f"""
-    SELECT name, logo_url, description FROM brand
-    WHERE name = %s;
-    """, (brand_name, ))
-    db_result = db.fetchone()
-    
+    db_result = get_brand_details(brand_name)   
     if not db_result:
         return "Brand not found."
 
     return render_template("brand_detail.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
+
+@app.route("/edit/brand/<brand_name>", methods=["POST", "GET"])
+def edit_brand(brand_name):
+    print(123, request.method)
+    if request.method == "GET":
+        db_result = get_brand_details(brand_name)
+        if not db_result:
+            return "Brand not found!s"
+            
+        return render_template("edit_brand.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
+    
+    else:  # method == POST
+        print("here")
+        brand_name = request.form.get("brand_name") or ""
+        brand_description = request.form.get("brand_description") or ""
+        brand_logo_url = request.form.get("brand_logo_url") or ""
+        db_connection.commit()
+        db.execute("""
+        UPDATE brand
+        SET name = %s, description = %s, logo_url = %s
+        WHERE name = %s;
+        """, (brand_name, brand_description, brand_logo_url, brand_name))
+        db_connection.commit()
+        return redirect(f"/brands/{brand_name}")
 
 # @app.errorhandler(404)
 # def not_found_error(error):

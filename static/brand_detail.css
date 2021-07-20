@@ -1,0 +1,28 @@
+
+.brand_details
+{
+    margin-right: 3em;
+    margin-left: 3em;
+}
+.brand_details p
+{
+    margin-left: 5em;
+    margin-right: 5em;
+    text-align: justify;
+}
+
+.brand_image
+{
+    height: 390px;
+    background: hsla(150, 60%, 34%, 0.199);
+    position: relative;
+    border-radius: 5px;
+}
+.brand_image img
+{
+    /* background: hsla(150, 60%, 34%, 0.1); */
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 5px;
+}
