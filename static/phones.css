@@ -1,11 +1,9 @@
-/* @import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap'); */
-
-
 .brandcard {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     /* background: #353535; */
     border: 3px solid hsl(194, 60%, 34%);
     background: hsla(150, 60%, 34%, 0.199);
@@ -17,7 +15,9 @@
     border-radius: 4px;
     transition: all 500ms;
     overflow: hidden;
-      padding-bottom: 0.5em;
+    padding-right: 2px;
+    padding-left: 2px;
+    padding-bottom: 0.5em;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -25,9 +25,9 @@
 
  .brandcardimage
  {
-    width: 100px;
-    height: 120px;
-    /* background: white; */
+    width: 80px;
+    height: 96px;
+    background: none;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -51,9 +51,9 @@
  }
 
  .brands-grid {
-    margin-right: 150px;
-    margin-left: 150px;
+    margin-right: 200px;
+    margin-left: 200px;
     display: grid;
     gap: 3rem;
-    grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
  }

@@ -177,6 +177,19 @@ def edit_brand(brand_name):
         flash("Data successfully updated", "success")
         return redirect(f"/brands/{brand_name}")
 
+@app.route("/phones")
+def phones():
+    db.execute(f"""
+    SELECT brand_name, name, image_url FROM phone
+    """)
+    db_result = db.fetchall()
+    phones = []
+    for row in db_result:
+        phones.append({"brand_name": row[0], "name": row[1], "image_url": row[2]})
+
+    return render_template("phones.html", phones=phones)
+
+
 # @app.errorhandler(404)
 # def not_found_error(error):
 #     return render_template('404.html', pic=pic), 404
