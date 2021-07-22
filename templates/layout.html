@@ -27,9 +27,12 @@
           <li> <a href="/brands"> Brands </a> </li>
           <li> <a href="/"> Phones </li>
           <li> <a href="/"> News </a> </li>
+          {% if session.user_name %}
+          <li> <a href="/signout"> Sign Out </a> </li>
+          {% else %}
           <li> <a href="/signup"> Sign Up </a> </li>
           <li> <a href="/signin"> Sign In </a> </li>
-          <li> <a href="/signin"> Sign In </a> </li>
+          {% endif %}
         </ul>
       </nav>
     </div>
@@ -62,7 +65,17 @@
   {%- endmacro %}
 
   <footer>
-    Mobinfo 2021
+    Mobinfo 2021 | 
+    {% if session.user_name %}
+    Signed in as {{ session.user_name }} - {{ session.first_name }} {{ session.last_name }}
+    <a href="/signout" style="text-decoration: underline"> Sign Out </a>
+    {% else %}
+    Not signed in.
+    <a href="/signin" style="text-decoration: underline"> Sign In </a>
+    Or
+    <a href="/signup" style="text-decoration: underline"> Sign Up </a>
+    {% endif %}
+
   </footer>
 </body>
 

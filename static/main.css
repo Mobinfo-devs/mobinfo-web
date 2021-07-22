@@ -85,6 +85,12 @@ footer {
   border: 2px solid green;
 }
 
+.message /* for alert */
+{
+  background-color: rgba(0, 0, 128, 0.6);  /* green */
+  border: 2px solid rgb(0, 0, 128);
+}
+
 /* The close button */
 .closebtn {
   margin-left: 15px;

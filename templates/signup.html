@@ -9,7 +9,7 @@
     <div id="formContent">
         <h2> Sign Up </h2>
 
-        <form action="/signup" method="GET">
+        <form action="/signup" method="POST">
             <input autocomplete="off" name="firstname" placeholder="First Name" type="text" maxlength="30" required>
             <input autocomplete="off" name="lastname" placeholder="Last Name" type="text" maxlength="30" required>
             <input autocomplete="off" name="username" placeholder="Unique Username" type="text" maxlength="20" required>
@@ -19,8 +19,9 @@
             <br><br>
             <input type="submit" value="Sign Up">
         </form>
-
-
+        <p> Already have an account? </p>
+        <a href="/signin" style="color: black; text-decoration: underline;"> Sign In </a>
+        <br><br>
     </div>
 </div>
 
