@@ -29,12 +29,24 @@
           <li> <a href="/"> News </a> </li>
           <li> <a href="/signup"> Sign Up </a> </li>
           <li> <a href="/signin"> Sign In </a> </li>
+          <li> <a href="/signin"> Sign In </a> </li>
         </ul>
       </nav>
     </div>
 
   </header>
   
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert {{ category }}">
+          <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+          {{ message }}
+        </div>  
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
   
   <main>
   {% block body %} {% endblock %}

@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request
+from logging import error
+from flask import Flask, render_template, request, flash
 from os import getenv
 import mysql.connector
-from mysql.connector.constants import RefreshOption
 from werkzeug.utils import redirect
-from helper import get_brand_details
 
 
 db_connection = mysql.connector.connect(
@@ -16,15 +15,19 @@ db_connection = mysql.connector.connect(
 db = db_connection.cursor()
 
 app = Flask(__name__)
+app.secret_key = "35gbbad932565nnssndg"
 app.config.update(
     DEBUG=True,
     TEMPLATES_AUTO_RELOAD=True
 )
 
 
+
 @app.route("/")
 def index():
-    return render_template("index.html", title="Mobinfo")
+    flash("Home page", "error")
+    flash("Home", "success")
+    return render_template("index.html", title="Mobinfo", error="sup")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -62,39 +65,45 @@ def brands():
 
 @app.route("/brands/<brand_name>")
 def specific_brand(brand_name):
-    db_result = get_brand_details(brand_name)   
+    # db_result = get_brand_details(brand_name)   
+    db.execute(f"""
+    SELECT name, logo_url, description FROM brand
+    WHERE name = %s;
+    """, (brand_name, ))
+    db_result = db.fetchone()
     if not db_result:
         return "Brand not found."
 
     return render_template("brand_detail.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
 
-@app.route("/edit/brand/<brand_name>", methods=["POST", "GET"])
+@app.route("/brands/<brand_name>/edit", methods=["POST", "GET"])
 def edit_brand(brand_name):
-    print(123, request.method)
     if request.method == "GET":
-        db_result = get_brand_details(brand_name)
+        db.execute(f"""
+        SELECT name, logo_url, description FROM brand
+        WHERE name = %s;
+        """, (brand_name, ))
+        db_result = db.fetchone()
         if not db_result:
-            return "Brand not found!s"
+            return "Brand not found!"
             
         return render_template("edit_brand.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
     
     else:  # method == POST
-        print("here")
-        brand_name = request.form.get("brand_name") or ""
-        brand_description = request.form.get("brand_description") or ""
-        brand_logo_url = request.form.get("brand_logo_url") or ""
-        db_connection.commit()
+        brand_name = request.form.get("brand_name") #or ""
+        brand_description = request.form.get("brand_description") #or ""
+        brand_logo_url = request.form.get("brand_logo_url") #or ""
         db.execute("""
         UPDATE brand
         SET name = %s, description = %s, logo_url = %s
         WHERE name = %s;
         """, (brand_name, brand_description, brand_logo_url, brand_name))
         db_connection.commit()
+        flash("Data successfully updated", "success")    
         return redirect(f"/brands/{brand_name}")
 
 # @app.errorhandler(404)
 # def not_found_error(error):
 #     return render_template('404.html', pic=pic), 404
 
-    
 app.run(debug=True)
