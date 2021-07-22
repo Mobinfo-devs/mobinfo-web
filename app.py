@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request
+from logging import error
+from flask import Flask, render_template, request, flash
 from os import getenv
 import mysql.connector
-from mysql.connector.constants import RefreshOption
 from werkzeug.utils import redirect
 
 
@@ -15,6 +15,7 @@ db_connection = mysql.connector.connect(
 db = db_connection.cursor()
 
 app = Flask(__name__)
+app.secret_key = "35gbbad932565nnssndg"
 app.config.update(
     DEBUG=True,
     TEMPLATES_AUTO_RELOAD=True
@@ -24,7 +25,9 @@ app.config.update(
 
 @app.route("/")
 def index():
-    return render_template("index.html", title="Mobinfo")
+    flash("Home page", "error")
+    flash("Home", "success")
+    return render_template("index.html", title="Mobinfo", error="sup")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -96,10 +99,11 @@ def edit_brand(brand_name):
         WHERE name = %s;
         """, (brand_name, brand_description, brand_logo_url, brand_name))
         db_connection.commit()
+        flash("Data successfully updated", "success")    
         return redirect(f"/brands/{brand_name}")
 
 # @app.errorhandler(404)
 # def not_found_error(error):
 #     return render_template('404.html', pic=pic), 404
 
-    
+app.run(debug=True)
