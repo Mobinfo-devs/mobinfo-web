@@ -1,0 +1,36 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+  .eighty {
+    width: 80%;
+  }
+  .twenty {
+    width: 20%;
+
+  }
+  /* see me */
+  th {
+    border: solid;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: rgba(192, 192, 192, 0.301);
+  
+  }
+  td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: solid;
+    padding-left: 8px;
+  }
+  /* play with bg cells and cols ? */
+  
+  /* tr:nth-child(even) {
+    background:rgba(100,255,50,0.3);
+    }
+  tr:nth-child(odd)  {
+    background:rgba(255,255,255,0.3);
+    } */
+
+  
