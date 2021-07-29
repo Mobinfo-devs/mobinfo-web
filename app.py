@@ -140,6 +140,11 @@ def brands():
     return render_template("brands.html", brands=brands)
 
 
+@app.route("brands/add", methods=["GET", "POST")])
+def add_brand():
+    
+
+    
 @ app.route("/brands/<brand_name>")
 def brand_details(brand_name):
     # db_result = get_brand_details(brand_name)

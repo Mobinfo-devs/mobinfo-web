@@ -1,0 +1,34 @@
+
+! Edit phones
+    a) an html file with text areas for all phone specs
+    b) python function
+
+! add phone
+    a) html file with text area for all phone specs
+    b) python function
+
+! add brand
+    a) html file with text area for all brand details
+    b) python function
+
+! News
+    a) collect news (how? add to excel first?)
+        > heading, text, image
+
+    b) html page for all news
+        > somewhat like brands.html but each news on one line?
+
+    c) html page for specific news 
+        > css page too? somewhat like brand_details?
+    
+
+! reviews
+    a) show reviews under phone sorted by date with rating, reviewer name, text (maybe not all reviews?)
+        >show option to delete a review (mayyyyybee edit? nah? maybe??)
+    b) add option to add review if logged in
+
+! feature of liking phones
+    a) heart button...
+
+
+! search and filters on phones page
