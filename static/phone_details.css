@@ -1,0 +1,28 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+    border: 3px solid hsl(194, 60%, 34%);
+    border-radius: 5px;
+    }
+  .eighty {
+    width: 80%;
+  }
+  .twenty {
+    width: 20%;
+  }
+  
+  th {
+    /* border: solid; */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: hsla(200, 60%, 34%, 0.75);
+  }
+ 
+  td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 8px;
+    background-color: hsla(174, 60%, 34%, 0.267);
+  }
+
+  

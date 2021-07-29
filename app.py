@@ -151,7 +151,7 @@ def specific_brand(brand_name):
     return render_template("brand_detail.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
 
 
-@ app.route("/brands/<brand_name>/edit", methods=["POST", "GET"])
+@app.route("/brands/<brand_name>/edit", methods=["POST", "GET"])
 def edit_brand(brand_name):
     if request.method == "GET":
         db.execute(f"""
@@ -254,7 +254,24 @@ def phone_specs(brand_phone_id):
     phone_details["rear_cameras"] = [row[0] for row in camera_rows if row[1] == "rear"]
     phone_details["front_cameras"] = [row[0] for row in camera_rows if row[1] == "front"]
 
-    return render_template("specs.html", title=f"Specicifications - {phone_details['brand_name']} {phone_details['phone_name']}", phone_details=phone_details)
+    print(phone_details)
+    return render_template("phone_details.html", title=f"Specicifications - {phone_details['brand_name']} {phone_details['phone_name']}", phone_details=phone_details)
+
+
+@app.route("/phones/<brand_phone_id>/edit", methods=["POST", "GET"])
+def edit_phone(brand_phone_id):
+    if request.method == "GET":
+        db.execute(f"""
+        SELECT name, logo_url, description FROM brand
+        WHERE name = %s;
+        """, (brand_name, ))
+        db_result = db.fetchone()
+        if not db_result:
+            return "Brand not found!"
+
+        return render_template("edit_brand.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
+
+
 
 # @app.errorhandler(404)
 # def not_found_error(error):

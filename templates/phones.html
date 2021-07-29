@@ -13,7 +13,7 @@
 <section class="brands-grid"> 
 
    {% for phone in phones %}
-   <a href = "/phones/{{ phone['brand_name'] + '_' + '_'.join(phone['name'].split()) + '-'}} {{ phone['id'] }}">
+   <a href = "/phones/{{ phone['brand_name'] + '_' + '_'.join(phone['name'].split())}}-{{ phone['id'] }}">
       <div class = "brandcard">
          <h5> {{ phone["brand_name"] + " " + phone["name"] }} </h5>
          <div class = brandcardimage>
