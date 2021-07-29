@@ -1,88 +1,112 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="specs.css" />
-    <title>Specifications</title>
-  </head>
-  <body>
-    <div style="overflow-x: auto ">
-      <table>
-        <colgroup>
-          <col class="twenty" />
-          <col class="eighty" />
-        </colgroup>
-        <tr>
-          <th>OS</th>
-          <td>Android 10 OS, One UI 2.1</td>
-        </tr>
+{% extends "layout.html" %}
 
-        <tr>
-          <th>Weight</th>
-          <td>279 g</td>
-        </tr>
 
-        <tr>
-          <th>CPU</th>
-          <td>Octa-core (1 x 3.09 GHz Kryo 585 + 3 x 2.42 GHz Kryo 585 + 4 x 1.8 GHz Kryo 585</td>
-        </tr>
-        <tr>
-          <th>Chipset</th>
-          <td>Qualcomm SM8250 Snapdragon 865+ (7 nm+)</td>
-        </tr>
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='specs.css') }}">
+{% endblock %}
 
-        <tr>
-          <th>Display Technology</th>
-          <td>Foldable Dynamic AMOLED 2X Capacitive Touchscreen, 16M Colors, Multitouch</td>
-        </tr>
-        <tr>
-          <th>Screen Size</th>
-          <td>7.6 inch</td>
-        </tr>
-        <tr>
-          <th>Display Resolution</th>
-          <td>1536 x 2208 Pixels (~354 PPI)</td>
-        </tr>
-        <tr>
-          <th>Extra Display Features</th>
-          <td>HDR10+, 120Hz refresh rate, Cover display: 6.23, Super AMOLED, (816 x 2260 pixels) + (25:9)</td>
-        </tr>
-        <tr>
-          <th>ROM</th>
-          <td>256 GB</td>
-        </tr>
-        <tr>
-          <th>RAM</th>
-          <td>12 GB</td>
-        </tr>
-        <tr>
-          <th>Front Camera</th>
-          <td>10 MP, 10 MP</td>
-        </tr>
-        <tr>
-          <th>Rear Camera</th>
-          <td>12, 12, 12</td>
-        </tr>
-        <tr>
-          <th>Sensors</th>
-          <td>Accelerometer, Barometer, Compass, Fingerprint , Gyro, ProximitY</td>
-        </tr>
-        <tr>
-          <th>Colors</th>
-          <td>Mystic Black, Mystic Bronze</td>
-        </tr>
-        <tr>
-          <th>Battery Capacity</th>
-          <td>4500 Mah</td>
-        </tr>
-        <tr>
-          <th>Price Rupees</th>
-          <td>Rs. 269999</td>
-        </tr>
-        
-      </table>
-    </div>
-  </body>
+{% block body %}
+<h1 style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: max-content;"> 
+  Specifications - {{ phone_details["brand_name"] }} {{ phone_details["phone_name"] }} 
+</h1>
+<img src={{ phone_details['image_url'] }} alt="{{ phone_details['brand_name'] }} {{ phone_details['phone_name'] }} image">
+<hr>
+<body>
+  <div style="overflow-x: auto; margin: 40px;">
+    <table>
+      <colgroup>
+        <col class="twenty" />
+        <col class="eighty" />
+      </colgroup>
+      <tr>
+        <th>OS</th>
+        <td> {{ phone_details["os"] }} </td>
+      </tr>
+
+      <tr>
+        <th>Weight</th>
+        <td> {{ phone_details["weight_grams"] }}g </td>
+      </tr>
+
+      <tr>
+        <th>CPU</th>
+        <td> {{ phone_details["cpu"] }} </td>
+      </tr>
+
+      <tr>
+        <th>Chipset</th>
+        <td> {{ phone_details["chipset"] }} </td>
+      </tr>
+
+      <tr>
+        <th>Display Technology</th>
+        <td> {{ phone_details["display_technology"] }} </td>
+      </tr>
+      <tr>
+        <th>Screen Size</th>
+        <td> {{ phone_details["screen_size_inches"] }} inches </td>
+      </tr>
+      <tr>
+        <th> Display Resolution </th>
+        <td> {{ phone_details["display_technology"] }} </td>
+      </tr>
+      <tr>
+        <th> Extra Display Features </th>
+        <td> {{ phone_details["extra_display_features"] }} </td>
+      </tr>
+      <tr>
+        <th> Built-in Memory </th>
+        <td> {{ phone_details["built_in_memory_gb"] }} </td>
+      </tr>
+      <tr>
+        <th> RAM </th>
+        <td> {{ phone_details["ram_GB"] }} GB </td>
+      </tr>
+      <tr>
+        <th> Front Cameras </th>
+        <td>
+          {% for front_camera in phone_details["front_cameras"] %}
+          {{ front_camera }} MP,
+          {% endfor %}</td>
+      </tr>
+      <tr>
+        <th> Rear Cameras </th>
+        <td>
+          {% for rear_camera in phone_details["rear_cameras"] %}
+          {{ rear_camera }} MP,
+          {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <th> Sensors </th>
+        <td>
+          {% for sensor in phone_details["sensors"] %}
+          {{ sensor }},
+          {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <th> Colors </th>
+        <td>
+          {% for color in phone_details["colors"] %}
+          {{ color }},
+          {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <th> Battery Capacity </th>
+        <td> {{ phone_details["battery_capacity_mah"] }} mAh </td>
+      </tr>
+      <tr>
+        <th> Price </th>
+        <td>Rs. {{ phone_details["price_rupees"] }} </td>
+      </tr>
+
+    </table>
+  </div>
+</body>
+
 </html>
+
+
+{% endblock %}

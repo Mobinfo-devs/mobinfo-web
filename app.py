@@ -178,17 +178,83 @@ def edit_brand(brand_name):
         return redirect(f"/brands/{brand_name}")
 
 @app.route("/phones")
-def phones():
+def phones(): 
     db.execute(f"""
-    SELECT brand_name, name, image_url FROM phone
+    SELECT brand_name, name, image_url, id FROM phone
     """)
     db_result = db.fetchall()
     phones = []
     for row in db_result:
-        phones.append({"brand_name": row[0], "name": row[1], "image_url": row[2]})
+        phones.append({"brand_name": row[0], "name": row[1], "image_url": row[2], "id": row[3]})
 
     return render_template("phones.html", phones=phones)
 
+
+@app.route("/phones/<brand_phone_id>")
+def phone_specs(brand_phone_id):
+    phone_id = int(brand_phone_id[ brand_phone_id.find("-") + 1 : ])
+
+    db.execute("""
+    SELECT * FROM phone
+    WHERE id = %s;
+    """,
+    (phone_id,) )
+    phone_row = db.fetchone()
+    if not phone_row:
+        return "<h2> Phone not found </h2>"
+    else:
+        phone_details = {
+            "id": phone_row[0],
+            "brand_name": phone_row[1],
+            "phone_name": phone_row[2],
+            "image_url": phone_row[3],
+            "os": phone_row[4],
+            "weight_grams": phone_row[5],
+            "cpu": phone_row[6],
+            "chipset": phone_row[7],
+            "display_technology": phone_row[8],
+            "screen_size_inches": phone_row[9],
+            "display_resolution": phone_row[10],
+            "extra_display_features": phone_row[11],
+            "built_in_memory_gb": phone_row[12],
+            "ram_GB": phone_row[13],
+            "battery_capacity_mah": phone_row[14],
+            "price_rupees": phone_row[15]
+        }
+
+    # get colors
+    db.execute("""
+    SELECT color.color_name
+    FROM color INNER JOIN phone_color
+    ON color.id = phone_color.color_id
+    WHERE phone_color.phone_id = %s
+    """,
+    (phone_id, ))
+    phone_details["colors"] = [row[0] for row in db.fetchall()]
+
+    # get sensors
+    db.execute("""
+    SELECT sensor.sensor_name
+    FROM sensor INNER JOIN phone_sensor
+    ON sensor.id = phone_sensor.sensor_id
+    WHERE phone_sensor.phone_id = %s
+    """,
+    (phone_id, ))
+    phone_details["sensors"] = [row[0] for row in db.fetchall()]
+
+    # get cameras
+    db.execute("""
+    SELECT camera.megapixels, camera.location
+    FROM camera INNER JOIN phone_camera
+    ON camera.id = phone_camera.camera_id
+    WHERE phone_camera.phone_id = %s
+    """,
+    (phone_id, ))
+    camera_rows = db.fetchall()
+    phone_details["rear_cameras"] = [row[0] for row in camera_rows if row[1] == "rear"]
+    phone_details["front_cameras"] = [row[0] for row in camera_rows if row[1] == "front"]
+
+    return render_template("specs.html", title=f"Specicifications - {phone_details['brand_name']} {phone_details['phone_name']}", phone_details=phone_details)
 
 # @app.errorhandler(404)
 # def not_found_error(error):

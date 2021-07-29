@@ -10,17 +10,17 @@
 <p> Click on any phone to know more about it. </p>
 <hr>
 
-<section class="brands-grid">
+<section class="brands-grid"> 
 
    {% for phone in phones %}
-   <!-- <a href = "/brands/{{ phone['name'] }}"> -->
+   <a href = "/phones/{{ phone['brand_name'] + '_' + '_'.join(phone['name'].split()) + '-'}} {{ phone['id'] }}">
       <div class = "brandcard">
          <h5> {{ phone["brand_name"] + " " + phone["name"] }} </h5>
          <div class = brandcardimage>
             <img src = {{ phone["image_url"] }} >
          </div>
       </div>
-   <!-- </a> -->
+   </a>
    {% endfor %}
 
 </section>
