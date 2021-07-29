@@ -53,6 +53,7 @@
  .brands-grid {
     margin-right: 200px;
     margin-left: 200px;
+    padding: 30px;
     display: grid;
     gap: 3rem;
     grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));

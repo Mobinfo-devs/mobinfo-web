@@ -1,9 +1,9 @@
-{% from 'layout.html' import component_edit  %}
+{% from 'layout.html' import admin_component  %}
 
 {% extends "layout.html" %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='brand_detail.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='brand_details.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -15,7 +15,7 @@
     <p> {{ brand_description }} </p>
 </div>
 
-{{ component_edit(text='Edit brand', route="/brands/" + brand_name + "/edit") }}
+{{ admin_component(type='edit', text='Edit brand', route="/brands/" + brand_name + "/edit") }}
 
 </div>
 {% endblock %}

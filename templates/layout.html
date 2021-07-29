@@ -55,11 +55,15 @@
     {% block body %} {% endblock %}
   </main>
 
-  {% macro component_edit(text, route) -%}
-  <div class="admin_edit">
+  {% macro admin_component(text, route, type="edit") -%}
+  <div class="admin">
     <a href="{{ route }}">
-      <label for="edit_icon"> {{ text }} </label>
+      <label for="edit_icon"> <u> {{ text }} </u> </label>
+      {% if type == "add" %}
+      <img name="edit_icon" src={{ url_for('static', filename='images/add_icon.svg' ) }}>
+      {% else %}
       <img name="edit_icon" src={{ url_for('static', filename='images/edit_icon.svg' ) }}>
+      {% endif %}
     </a>
   </div>
   {%- endmacro %}

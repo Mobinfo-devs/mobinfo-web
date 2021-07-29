@@ -1,4 +1,4 @@
-{% from 'layout.html' import component_edit  %}
+{% from 'layout.html' import admin_component  %}
 
 {% extends "layout.html" %}
 
@@ -10,7 +10,7 @@
 {% block body %}
 <h1
   style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: max-content;">
-  Specifications - {{ phone_details["brand_name"] }} {{ phone_details["phone_name"] }}
+  {{ phone_details["brand_name"] }} {{ phone_details["phone_name"] }}
 </h1>
 <img src={{ phone_details['image_url'] }}
   alt="{{ phone_details['brand_name'] }} {{ phone_details['phone_name'] }} image">
@@ -110,6 +110,10 @@
   </table>
 </div>
 
-{{ component_edit(text='Edit phone details', route="/phones/" + phone_details['brand_name'] + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/edit") }}
+{{
+admin_component(type="edit",
+text='Edit phone details',
+route="/phones/" + phone_details['brand_name'] + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/edit") 
+}}
 
 {% endblock %}

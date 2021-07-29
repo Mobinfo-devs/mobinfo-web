@@ -1,3 +1,5 @@
+{% from 'layout.html' import admin_component  %}
+
 {% extends "layout.html" %}
 
 {% block head %}
@@ -24,6 +26,13 @@
    {% endfor %}
 
 </section>
+
+{{
+   admin_component(type="add",
+   text='Add new brand',
+   route="/brands/add")
+}}
+
 {% endblock %}
 
 <!-- https://logos-download.com/6609-xiaomi-logo-download.html -->
