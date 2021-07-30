@@ -1,7 +1,8 @@
 
-! Edit phones
-    a) an html file with text areas for all phone specs
-    b) python function
+! Edit phones (2/3 DONE)
+    a) an html file with text areas for all phone specs (DONE)
+    b) python function get part (DONE)
+    c) python function post part 
 
 ! add phone
     a) html file with text area for all phone specs
