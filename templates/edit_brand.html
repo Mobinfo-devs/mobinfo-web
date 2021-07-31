@@ -4,14 +4,9 @@
 {% endblock %}
 
 {% block body %}
-<h1> Edit Brand Details ({{ brand_name }}) </h1>
-<h2> Edit </h2>
+<h2> Edit Brand ({{ brand_name }}) </h2>
 
 <form action="{{ '/brands/'+ brand_name + "/edit" }}" method="POST">
-    <label for="brand_name">Brand Name: </label> <br>
-    <textarea name="brand_name" cols="100" rows="1">{{ brand_name }}</textarea>
-    <br> <br>
-
     <label for="brand_description">Brand Details: </label> <br>
     <textarea name="brand_description" cols="100" rows="20" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ brand_description }}</textarea>
     <br> <br>
@@ -21,7 +16,7 @@
     <br> <br>
 
     <br><br>
-    <input type="submit" value="Save Details">
+    <input type="submit" value="Save">
 </form>
 
 </div>

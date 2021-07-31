@@ -81,7 +81,7 @@ footer {
 
 .success /* for alert */
 {
-  background-color: rgba(0, 128, 0, 0.6);  /* green */
+  background-color: rgba(0, 128, 0, 0.5);  /* green */
   border: 2px solid green;
 }
 

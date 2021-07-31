@@ -1,5 +1,5 @@
 from os import getenv
-
+import traceback
 import mysql.connector
 from flask import Flask, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -29,11 +29,11 @@ Session(app)
 
 @app.route("/")
 def index():
-    # flash("Success", "success")
-    # flash("message", "message")
-    # flash("ERROR", "error")
-    # flash("flash")
-    return render_template("index.html", title="Mobinfo", error="sup")
+    flash("Success", "success")
+    flash("message", "message")
+    flash("ERROR", "error")
+    flash("flash")
+    return render_template("index.html", title="Mobinfo")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -143,9 +143,8 @@ def brands():
 @app.route("/brands/add", methods=["GET", "POST"])
 def add_brand():
     pass
-    
 
-    
+
 @ app.route("/brands/<brand_name>")
 def brand_details(brand_name):
     # db_result = get_brand_details(brand_name)
@@ -174,14 +173,13 @@ def edit_brand(brand_name):
         return render_template("edit_brand.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
 
     else:  # method == POST
-        brand_name = request.form.get("brand_name")  # or ""
         brand_description = request.form.get("brand_description")  # or ""
         brand_logo_url = request.form.get("brand_logo_url")  # or ""
         db.execute("""
         UPDATE brand
-        SET name = %s, description = %s, logo_url = %s
+        SET description = %s, logo_url = %s
         WHERE name = %s;
-        """, (brand_name, brand_description, brand_logo_url, brand_name))
+        """, (brand_description, brand_logo_url, brand_name))
         db_connection.commit()
         flash("Data successfully updated", "success")
         return redirect(f"/brands/{brand_name}")
@@ -283,25 +281,25 @@ def edit_phone(brand_phone_id):
         phone_row = db.fetchone()
         if not phone_row:
             return "<h2> Phone not found </h2>"
-        
+
         # TODO: DRY! (did following stuff in phones func too)
         phone_details = {
-        "id": phone_row[0],
-        "brand_name": phone_row[1],
-        "phone_name": phone_row[2],
-        "image_url": phone_row[3],
-        "os": phone_row[4],
-        "weight_grams": phone_row[5],
-        "cpu": phone_row[6],
-        "chipset": phone_row[7],
-        "display_technology": phone_row[8],
-        "screen_size_inches": phone_row[9],
-        "display_resolution": phone_row[10],
-        "extra_display_features": phone_row[11],
-        "built_in_memory_gb": phone_row[12],
-        "ram_gb": phone_row[13],
-        "battery_capacity_mah": phone_row[14],
-        "price_rupees": phone_row[15]
+            "id": phone_row[0],
+            "brand_name": phone_row[1],
+            "phone_name": phone_row[2],
+            "image_url": phone_row[3],
+            "os": phone_row[4],
+            "weight_grams": phone_row[5],
+            "cpu": phone_row[6],
+            "chipset": phone_row[7],
+            "display_technology": phone_row[8],
+            "screen_size_inches": phone_row[9],
+            "display_resolution": phone_row[10],
+            "extra_display_features": phone_row[11],
+            "built_in_memory_gb": phone_row[12],
+            "ram_gb": phone_row[13],
+            "battery_capacity_mah": phone_row[14],
+            "price_rupees": phone_row[15]
         }
 
         # get colors
@@ -311,7 +309,7 @@ def edit_phone(brand_phone_id):
         ON color.id = phone_color.color_id
         WHERE phone_color.phone_id = %s
         """,
-                (phone_id, ))
+                   (phone_id, ))
         phone_details["colors"] = [row[0] for row in db.fetchall()]
 
         # get sensors
@@ -321,7 +319,7 @@ def edit_phone(brand_phone_id):
         ON sensor.id = phone_sensor.sensor_id
         WHERE phone_sensor.phone_id = %s
         """,
-                (phone_id, ))
+                   (phone_id, ))
         phone_details["sensors"] = [row[0] for row in db.fetchall()]
 
         # get cameras
@@ -331,30 +329,224 @@ def edit_phone(brand_phone_id):
         ON camera.id = phone_camera.camera_id
         WHERE phone_camera.phone_id = %s
         """,
-                (phone_id, ))
+                   (phone_id, ))
         camera_rows = db.fetchall()
         phone_details["rear_cameras"] = [row[0]
-                                        for row in camera_rows if row[1] == "rear"]
+                                         for row in camera_rows if row[1] == "rear"]
         phone_details["front_cameras"] = [row[0]
-                                        for row in camera_rows if row[1] == "front"]
-        
+                                          for row in camera_rows if row[1] == "front"]
+
         return render_template("edit_phone.html", title=f"Edit - {phone_details['brand_name']} {phone_details['phone_name']}", phone_details=phone_details)
 
     else:  # method == POST
-        brand_name = request.form.get("brand_name")  # or ""
-        brand_description = request.form.get("brand_description")  # or ""
-        brand_logo_url = request.form.get("brand_logo_url")  # or ""
+        try:
+            phone_name = request.form.get("phone_name")  # or ""
+            image_url = request.form.get("image_url")  # or ""
+            os = request.form.get("os")
+            weight_grams = int(request.form.get("weight_grams"))
+            cpu = request.form.get("cpu")
+            chipset = request.form.get("chipset")
+            display_technology = request.form.get("display_technology")
+            screen_size_inches = float(request.form.get("screen_size_inches"))
+            display_resolution = request.form.get("display_resolution")
+            extra_display_features = request.form.get("extra_display_features")
+            built_in_memory_gb = int(request.form.get("built_in_memory_gb"))
+            ram_gb = int(request.form.get("ram_gb"))
+            front_cameras = [int(mp) for mp in eval(
+                request.form.get("front_cameras"))]
+            rear_cameras = [int(mp) for mp in eval(
+                request.form.get("rear_cameras"))]
+            # front_cameras = eval(request.form.get("front_cameras"))
+            # rear_cameras = eval(request.form.get("rear_cameras"))
+            sensors = eval(request.form.get("sensors"))
+            colors = eval(request.form.get("colors"))
+            battery_capacity_mah = int(
+                request.form.get("battery_capacity_mah"))
+            price_rupees = int(request.form.get("price_rupees"))
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            y = (request.form.get("colors"))
+            print(y)
+            print(type(y))
+            flash("Error getting form data. Please try again", "error")
+            return redirect(f"/phones/{brand_phone_id}/edit")
+
         db.execute("""
-        UPDATE brand
-        SET name = %s, description = %s, logo_url = %s
-        WHERE name = %s;
-        """, (brand_name, brand_description, brand_logo_url, brand_name))
+        UPDATE phone
+        SET name = %s, image_url = %s, os = %s, weight_grams = %s, cpu = %s, chipset = %s, display_technology = %s, screen_size_inches = %s, display_resolution = %s, extra_display_features = %s, built_in_memory_GB = %s, ram_GB = %s, battery_capacity_mah = %s, price_rupees = %s
+        WHERE id = %s;
+        """,
+                   (phone_name, image_url, os, weight_grams, cpu, chipset, display_technology, screen_size_inches,
+                    display_resolution, extra_display_features, built_in_memory_gb, ram_gb, battery_capacity_mah, price_rupees, phone_id)
+                   )
         db_connection.commit()
-        flash("Data successfully updated", "success")
-        return redirect(f"/brands/{brand_name}")
+
+        # Colors
+        # Delete existing colors for the current phone
+        db.execute("""
+        DELETE FROM phone_color
+        WHERE phone_id = %s;""",
+                   (phone_id, ))
+        for color in colors:
+            db.execute("""
+            SELECT id FROM color
+            WHERE color_name = %s;
+            """, (color, ))
+            result = db.fetchone()
+
+            if not result:
+                # insert color
+                db.execute("""
+                INSERT INTO color (color_name)
+                VALUES (%s);
+                """,
+                           (color, )
+                           )
+                db_connection.commit()
+
+                # get color id from database
+                db.execute("""
+                SELECT id FROM color
+                WHERE color_name = %s;
+                """, (color, ))
+                result = db.fetchone()
+
+            color_id = result[0]
+
+            # insert into phone_color
+            db.execute("""
+                INSERT INTO phone_color
+                (phone_id, color_id)
+                VALUES (%s, %s);
+                """,
+                       (phone_id, color_id)
+                       )
+            db_connection.commit()
+
+        # Sensors
+        # Delete existing sensors for the current phone
+        db.execute("""
+        DELETE FROM phone_sensor
+        WHERE phone_id = %s;""",
+                   (phone_id, ))
+        for sensor in sensors:
+            db.execute("""
+                SELECT id FROM sensor
+                WHERE sensor_name = %s;
+                """, (sensor, ))
+            result = db.fetchone()
+
+            if not result:
+                # insert sensor
+                db.execute("""
+                INSERT INTO sensor (sensor_name)
+                VALUES (%s);
+                """,
+                           (sensor, )
+                           )
+                db_connection.commit()
+
+                db.execute("""
+                SELECT id FROM sensor
+                WHERE sensor_name = %s;
+                """, (sensor, ))
+                result = db.fetchone()
+
+            sensor_id = result[0]
+
+            # insert into phone_sensor
+            db.execute("""
+                INSERT INTO phone_sensor (phone_id, sensor_id)
+                VALUES (%s, %s);
+                """,
+                       (phone_id, sensor_id)
+                       )
+            db_connection.commit()
+
+        # Cameras
+        # Delete existing cameras for the current phone
+        db.execute("""
+        DELETE FROM phone_camera
+        WHERE phone_id = %s;""",
+                   (phone_id, ))
+        for camera_mp in rear_cameras:
+            # Check if camera exists, if not insert it
+            db.execute("""
+                SELECT id FROM camera
+                WHERE megapixels = %s and location = %s;
+                """, (camera_mp, "rear"))
+            result = db.fetchone()
+
+            if not result:
+                # insert rear camera
+                db.execute("""
+                INSERT INTO camera (megapixels, location)
+                VALUES (%s, %s);
+                """,
+                           (camera_mp, "rear")
+                           )
+                db_connection.commit()
+
+                db.execute("""
+                SELECT id FROM camera
+                WHERE megapixels = %s and location = %s;
+                """, (camera_mp, "rear"))
+                result = db.fetchone()
+
+            camera_id = result[0]
+
+            # insert into phone_camera
+            db.execute("""
+                INSERT INTO phone_camera (phone_id, camera_id)
+                VALUES (%s, %s);
+                """,
+                       (phone_id, camera_id)
+                       )
+            db_connection.commit()
+
+        for camera_mp in front_cameras:
+            print(camera_mp)
+            # Check if camera exists, if not insert it
+            db.execute("""
+                SELECT id FROM camera
+                WHERE megapixels = %s and location = %s;
+                """, (camera_mp, "front"))
+            result = db.fetchone()
+
+            if not result:
+                # insert front camera
+                db.execute("""
+                INSERT INTO camera (megapixels, location)
+                VALUES (%s, %s);
+                """,
+                           (camera_mp, "front")
+                           )
+                db_connection.commit()
+
+                db.execute("""
+                SELECT id FROM camera
+                WHERE megapixels = %s and location = %s;
+                """, (camera_mp, "front"))
+                result = db.fetchone()
+
+            camera_id = result[0]
+
+            # insert into phone_camera
+            db.execute("""
+                INSERT INTO phone_camera (phone_id, camera_id)
+                VALUES (%s, %s);
+                """,
+                       (phone_id, camera_id)
+                       )
+            db_connection.commit()
+
+        flash("Successfully updated data", "success")
+        return redirect(f"/phones/{brand_phone_id}")
 
 # @app.errorhandler(404)
 # def not_found_error(error):
 #     return render_template('404.html', pic=pic), 404
+
 
 app.run(debug=True)
