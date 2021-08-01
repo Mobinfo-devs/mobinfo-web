@@ -50,7 +50,7 @@ def signup():
         # credentials validation
 
         if len(user_name) < 4 or (" " in user_name):  # TODO: Also check for special chars
-            flash("Username can't be of less than 4 characters", "error")
+            flash("Username can't be of less than 4 characters or have spaces", "error")
             return render_template("signup.html", title="Sign Up")
 
         # checking if username already exists
@@ -81,7 +81,7 @@ def signup():
                    )
         db_connection.commit()
 
-        signin_user(user_name=user_name, first_name=f_name,
+        signin_user(session=session, user_name=user_name, first_name=f_name,
                     last_name=l_name, is_admin=False)
         flash("Successfully registered and logged in.", "success")
         return redirect("/")
@@ -150,7 +150,7 @@ def add_brand():
         brand_description = request.form.get("brand_description")  # or ""
         brand_logo_url = request.form.get("brand_logo_url")  # or ""
         if not brand_name:
-            flash("Can't leave brand name empty.")
+            flash("Can't leave brand name empty.", "error")
             return redirect("/brands/add")
 
         db.execute("""

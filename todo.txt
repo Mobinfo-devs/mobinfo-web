@@ -1,16 +1,21 @@
 
-! Edit phones (2/3 DONE)
+! Edit phones (DONE)
     a) an html file with text areas for all phone specs (DONE)
     b) python function get part (DONE)
     c) python function post part (DONE)
 
-! add phone
+! add phone (DONE)
     a) html file with text area for all phone specs
     b) python function
 
-! add brand
-    a) html file with text area for all brand details
-    b) python function
+! add brand (DONE)
+    a) html file with text area for all brand details (DONE) 
+    b) python function (DONE)
+
+! delete phone feature (on edit phone page)
+
+! Delete brand feature (on edit brand page)
+    > give warning that all phones of the brand will be yeeted too
 
 ! News
     a) collect news (how? add to excel first?)
