@@ -14,7 +14,7 @@ db_connection = mysql.connector.connect(
     database="mobinfo"
 )
 
-db = db_connection.cursor()
+db = db_connection.cursor(buffered=True)
 
 app = Flask(__name__)
 app.secret_key = "35gbbad932565nnssndg"
@@ -196,7 +196,222 @@ def phones():
         phones.append(
             {"brand_name": row[0], "name": row[1], "image_url": row[2], "id": row[3]})
 
-    return render_template("phones.html", phones=phones)
+    return render_template("phones.html", phones=phones, title="Phones")
+
+
+@app.route("/phones/add", methods=["POST", "GET"])
+def add_phone():
+    if request.method == "GET":
+        return render_template("add_phone.html", title="Add Phone")
+
+    else:  # request method is POST
+        try:
+            brand_name = request.form.get("brand_name").strip()
+            phone_name = request.form.get("phone_name").strip()  # or ""
+            if (not phone_name) or (not brand_name):
+                flash("Please fill all the required fields (marked with *)")
+                return redirect(f"/phones/add")
+            db.execute("""
+            SELECT * FROM brand WHERE name = %s""",
+            (brand_name, ))
+            if not db.fetchone():
+                flash("The brand you entered does not exist. Go to brands page and click Add Brand to add a new brand.")
+                return redirect(f"/phones/add")
+            image_url = request.form.get("image_url").strip()  # or ""
+            os = request.form.get("os").strip()
+            weight_grams = int(request.form.get("weight_grams").strip())
+            cpu = request.form.get("cpu").strip()
+            chipset = request.form.get("chipset").strip()
+            display_technology = request.form.get("display_technology").strip()
+            screen_size_inches = float(request.form.get("screen_size_inches").strip())
+            display_resolution = request.form.get("display_resolution").strip()
+            extra_display_features = request.form.get("extra_display_features").strip()
+            built_in_memory_gb = int(request.form.get("built_in_memory_gb").strip())
+            ram_gb = int(request.form.get("ram_gb").strip())
+            front_cameras = [int(mp) for mp in eval(
+                request.form.get("front_cameras"))]
+            rear_cameras = [int(mp) for mp in eval(
+                request.form.get("rear_cameras"))]
+            sensors = eval(request.form.get("sensors"))
+            colors = eval(request.form.get("colors"))
+            battery_capacity_mah = int(
+                request.form.get("battery_capacity_mah").strip())
+            price_rupees = int(request.form.get("price_rupees").strip())
+        except Exception as e:
+            print(e)
+            traceback.print_exc()
+            flash("Error getting form data. Please try again", "error")
+            return redirect(f"/phones/add")
+
+        db.execute("""
+        INSERT INTO phone (brand_name, name, image_url, os, weight_grams, cpu, chipset, display_technology, screen_size_inches,
+        display_resolution, extra_display_features, built_in_memory_GB, ram_GB, battery_capacity_mah, price_rupees)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+        """,
+                (brand_name, phone_name, image_url, os, weight_grams, cpu, chipset, display_technology, screen_size_inches, 
+        display_resolution, extra_display_features, built_in_memory_gb, ram_gb, battery_capacity_mah, price_rupees)
+        )
+        db_connection.commit()
+        flash("Successfully added to phone table", "success")
+        
+        # get id of the new phone from database
+        db.execute("""
+            SELECT id FROM phone
+            WHERE brand_name = %s AND name = %s;
+            """, (brand_name, phone_name)
+        )
+        phone_id = db.fetchone()[0]
+
+        # Colors
+        for color in colors:
+            db.execute("""
+            SELECT id FROM color
+            WHERE color_name = %s;
+            """, (color, ))
+            result = db.fetchone()
+
+            if not result:
+                # insert color
+                db.execute("""
+                INSERT INTO color (color_name)
+                VALUES (%s);
+                """,
+                           (color, )
+                           )
+                db_connection.commit()
+
+                # get color id from database
+                db.execute("""
+                SELECT id FROM color
+                WHERE color_name = %s;
+                """, (color, ))
+                result = db.fetchone()
+
+            color_id = result[0]
+
+            # insert into phone_color
+            db.execute("""
+                INSERT INTO phone_color
+                (phone_id, color_id)
+                VALUES (%s, %s);
+                """,
+                       (phone_id, color_id)
+                       )
+            db_connection.commit()
+        flash("Successfully added all colors", "success")
+
+        # Sensors
+        for sensor in sensors:
+            db.execute("""
+                SELECT id FROM sensor
+                WHERE sensor_name = %s;
+                """, (sensor, ))
+            result = db.fetchone()
+
+            if not result:
+                # insert sensor
+                db.execute("""
+                INSERT INTO sensor (sensor_name)
+                VALUES (%s);
+                """,
+                           (sensor, )
+                           )
+                db_connection.commit()
+
+                db.execute("""
+                SELECT id FROM sensor
+                WHERE sensor_name = %s;
+                """, (sensor, ))
+                result = db.fetchone()
+
+            sensor_id = result[0]
+
+            # insert into phone_sensor
+            db.execute("""
+                INSERT INTO phone_sensor (phone_id, sensor_id)
+                VALUES (%s, %s);
+                """,
+                       (phone_id, sensor_id)
+                       )
+            db_connection.commit()
+        flash("Successfully added all sensors", "success")
+
+        # Cameras
+        for camera_mp in rear_cameras:
+            # Check if camera exists, if not insert it
+            db.execute("""
+                SELECT id FROM camera
+                WHERE megapixels = %s and location = %s;
+                """, (camera_mp, "rear"))
+            result = db.fetchone()
+
+            if not result:
+                # insert rear camera
+                db.execute("""
+                INSERT INTO camera (megapixels, location)
+                VALUES (%s, %s);
+                """,
+                           (camera_mp, "rear")
+                           )
+                db_connection.commit()
+
+                db.execute("""
+                SELECT id FROM camera
+                WHERE megapixels = %s and location = %s;
+                """, (camera_mp, "rear"))
+                result = db.fetchone()
+
+            camera_id = result[0]
+
+            # insert into phone_camera
+            db.execute("""
+                INSERT INTO phone_camera (phone_id, camera_id)
+                VALUES (%s, %s);
+                """,
+                       (phone_id, camera_id)
+                       )
+            db_connection.commit()
+        flash("Successfully added all rear cameras", "success")
+
+        for camera_mp in front_cameras:
+            print(camera_mp)
+            # Check if camera exists, if not insert it
+            db.execute("""
+                SELECT id FROM camera
+                WHERE megapixels = %s and location = %s;
+                """, (camera_mp, "front"))
+            result = db.fetchone()
+
+            if not result:
+                # insert front camera
+                db.execute("""
+                INSERT INTO camera (megapixels, location)
+                VALUES (%s, %s);
+                """,
+                           (camera_mp, "front")
+                           )
+                db_connection.commit()
+
+                db.execute("""
+                SELECT id FROM camera
+                WHERE megapixels = %s and location = %s;
+                """, (camera_mp, "front"))
+                result = db.fetchone()
+
+            camera_id = result[0]
+
+            # insert into phone_camera
+            db.execute("""
+                INSERT INTO phone_camera (phone_id, camera_id)
+                VALUES (%s, %s);
+                """,
+                       (phone_id, camera_id)
+                       )
+            db_connection.commit()
+        flash("Successfully added all front cameras", "success")
+
+        flash("Successfully added all data for new phoe", "success")
+        return redirect(f"/phones")
 
 
 @app.route("/phones/<brand_phone_id>")
@@ -340,18 +555,21 @@ def edit_phone(brand_phone_id):
 
     else:  # method == POST
         try:
-            phone_name = request.form.get("phone_name")  # or ""
-            image_url = request.form.get("image_url")  # or ""
-            os = request.form.get("os")
-            weight_grams = int(request.form.get("weight_grams"))
-            cpu = request.form.get("cpu")
-            chipset = request.form.get("chipset")
-            display_technology = request.form.get("display_technology")
-            screen_size_inches = float(request.form.get("screen_size_inches"))
-            display_resolution = request.form.get("display_resolution")
-            extra_display_features = request.form.get("extra_display_features")
-            built_in_memory_gb = int(request.form.get("built_in_memory_gb"))
-            ram_gb = int(request.form.get("ram_gb"))
+            phone_name = request.form.get("phone_name").strip()  # or ""
+            if not phone_name:
+                flash("Please fill all the required fields (marked with *)")
+                return redirect(f"/phones/{brand_phone_id}/edit")
+            image_url = request.form.get("image_url").strip()  # or ""
+            os = request.form.get("os").strip()
+            weight_grams = int(request.form.get("weight_grams").strip())
+            cpu = request.form.get("cpu").strip()
+            chipset = request.form.get("chipset").strip()
+            display_technology = request.form.get("display_technology").strip()
+            screen_size_inches = float(request.form.get("screen_size_inches").strip())
+            display_resolution = request.form.get("display_resolution").strip()
+            extra_display_features = request.form.get("extra_display_features").strip()
+            built_in_memory_gb = int(request.form.get("built_in_memory_gb").strip())
+            ram_gb = int(request.form.get("ram_gb").strip())
             front_cameras = [int(mp) for mp in eval(
                 request.form.get("front_cameras"))]
             rear_cameras = [int(mp) for mp in eval(
@@ -361,14 +579,11 @@ def edit_phone(brand_phone_id):
             sensors = eval(request.form.get("sensors"))
             colors = eval(request.form.get("colors"))
             battery_capacity_mah = int(
-                request.form.get("battery_capacity_mah"))
-            price_rupees = int(request.form.get("price_rupees"))
+                request.form.get("battery_capacity_mah").strip())
+            price_rupees = int(request.form.get("price_rupees").strip())
         except Exception as e:
             print(e)
             traceback.print_exc()
-            y = (request.form.get("colors"))
-            print(y)
-            print(type(y))
             flash("Error getting form data. Please try again", "error")
             return redirect(f"/phones/{brand_phone_id}/edit")
 

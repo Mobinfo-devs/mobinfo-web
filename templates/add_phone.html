@@ -1,0 +1,14 @@
+{% from 'phone_form.html' import phone_form  %}
+
+{% extends "layout.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1> Add new phone </h1>
+<p> * = necessary </p>
+
+{{ phone_form(type='add', action = '/phones/add') }}
+
+{% endblock %}

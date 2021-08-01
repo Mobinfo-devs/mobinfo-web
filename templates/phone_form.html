@@ -1,0 +1,85 @@
+{% macro phone_form(type, action, phone_details=None) %}
+
+<form action={{ action }} method="POST">
+    {% if type == "add" %}
+    <label for="brand_name">Brand Name* </label> <br>
+    <textarea name="brand_name" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["brand_name"] }}</textarea>
+    <br> <br>
+    {% endif%}
+    <label for="phone_name">Phone Name* </label> <br>
+    <textarea name="phone_name" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["phone_name"] }}</textarea>
+    <br> <br>
+
+    <label for="image_url">Phone image URL </label> <br>
+    <textarea name="image_url" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["image_url"] }}</textarea>
+    <br> <br>
+
+    <label for="os">OS </label> <br>
+    <textarea name="os" cols="100" onin put='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["os"] }}</textarea>
+    <br> <br>
+
+    <label for="weight_grams">Weight (g) </label> <br>
+    <textarea name="weight_grams" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["weight_grams"] }}</textarea>
+    <br> <br>
+
+    <label for="cpu">CPU </label> <br>
+    <textarea name="cpu" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["cpu"] }}</textarea>
+    <br> <br>
+
+    <label for="chipset">Chipset </label> <br>
+    <textarea name="chipset" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["chipset"] }}</textarea>
+    <br> <br>
+
+    <label for="display_technology">Display Technology </label> <br>
+    <textarea name="display_technology" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["display_technology"] }}</textarea>
+    <br> <br>
+
+    <label for="screen_size_inches">Screen Size (inches) </label> <br>
+    <textarea name="screen_size_inches" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["screen_size_inches"] }}</textarea>
+    <br> <br>
+
+    <label for="display_resolution">Display Resolution </label> <br>
+    <textarea name="display_resolution" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["display_resolution"] }}</textarea>
+    <br> <br>
+
+    <label for="extra_display_features">Extra Display Features </label> <br>
+    <textarea name="extra_display_features" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["extra_display_features"] }}</textarea>
+    <br> <br>
+
+    <label for="built_in_memory_gb">Built in memory (GB) </label> <br>
+    <textarea name="built_in_memory_gb" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["built_in_memory_gb"] }}</textarea>
+    <br> <br>
+
+    <label for="ram_gb">RAM (GB) </label> <br>
+    <textarea name="ram_gb" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["ram_gb"] }}</textarea>
+    <br> <br>
+
+    <label for="front_cameras">Front Cameras (comma seperated values for megapixels surrounded by square brackets) </label> <br>
+    <textarea name="front_cameras" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["front_cameras"] }}</textarea>
+    <br> <br>
+
+    <label for="rear_cameras">Rear Cameras (comma seperated values for megapixels surrounded by square brackets)  </label> <br>
+    <textarea name="rear_cameras" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["rear_cameras"] }}</textarea>
+    <br> <br>
+
+    <label for="sensors">Sensors (comma seperated and inverted comma surrounded sensor names surrounded by square brackets)  </label> <br>
+    <textarea name="sensors" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["sensors"] }}</textarea>
+    <br> <br>
+
+    <label for="colors">Colors (comma seperated and inverted comma surrounded colors surrounded by square brackets)  </label> <br>
+    <textarea name="colors" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["colors"] }}</textarea>
+    <br> <br>
+    
+    <label for="battery_capacity_mah">Battery Capacity (mAh) </label> <br>
+    <textarea name="battery_capacity_mah" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["battery_capacity_mah"] }}</textarea>
+    <br> <br>
+
+    <label for="price_rupees">Price (Rupees) </label> <br>
+    <textarea name="price_rupees" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ phone_details["price_rupees"] }}</textarea>
+    <br> <br>
+
+    <br><br>
+    <input type="submit" value="Save Details">
+</form>
+
+{%- endmacro %}
