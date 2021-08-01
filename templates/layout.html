@@ -55,15 +55,17 @@
     {% block body %} {% endblock %}
   </main>
 
-  {% macro admin_component(text, route, type="edit") -%}
+  {% macro admin_component(text, route, type) -%}
   {% if session.is_admin == True %}
   <div class="admin">
     <a href="{{ route }}">
       <label for="edit_icon"> <u> {{ text }} </u> </label>
       {% if type == "add" %}
       <img name="edit_icon" src={{ url_for('static', filename='images/add_icon.svg' ) }}>
-      {% else %}
+      {% elif type == "edit"%}
       <img name="edit_icon" src={{ url_for('static', filename='images/edit_icon.svg' ) }}>
+      {% else%}
+      <img name="edit_icon" src={{ url_for('static', filename='images/delete_icon.svg' ) }}>
       {% endif %}
     </a>
   </div>

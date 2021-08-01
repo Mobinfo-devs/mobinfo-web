@@ -1,14 +1,19 @@
+{% from 'layout.html' import admin_component %}
 {% from 'phone_form.html' import phone_form  %}
 
 {% extends "layout.html" %}
 
-{% block head %}
-{% endblock %}
-
 {% block body %}
+
 <h1> Edit Phone Details ({{ phone_details["brand_name"] + " " + phone_details["phone_name"] }}) </h1>
 <p> * = necessary </p>
 
-{{ phone_form(phone_details=phone_details, type='edit', action = '/phones/' + phone_details['brand_name'] + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/edit") }}
+{{ phone_form(phone_details=phone_details, type='edit', action = '/phones/' + '_'.join(phone_details["brand_name"].split()) + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/edit") }}
+
+{{
+    admin_component(type="delete",
+    text='Delete',
+    route='/phones/' + '_'.join(phone_details["brand_name"].split()) + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/delete")
+}}
 
 {% endblock %}

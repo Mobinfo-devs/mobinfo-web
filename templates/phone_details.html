@@ -113,7 +113,7 @@
 {{
 admin_component(type="edit",
 text='Edit phone details',
-route="/phones/" + phone_details['brand_name'] + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/edit") 
+route="/phones/" + '_'.join(phone_details['brand_name'].split())  + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/edit") 
 }}
 
 {% endblock %}

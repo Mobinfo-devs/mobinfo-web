@@ -785,6 +785,116 @@ def edit_phone(brand_phone_id):
         flash("Successfully updated data", "success")
         return redirect(f"/phones/{brand_phone_id}")
 
+
+@app.route("/phones/<brand_phone_id>/delete", methods=["POST", "GET"])
+def delete_phone(brand_phone_id):
+    phone_id = int(brand_phone_id[brand_phone_id.find("-") + 1:])
+    if request.method == "GET":
+        brand_name = brand_phone_id[: brand_phone_id.find("_")].replace("_", " ")
+        phone_name = brand_phone_id[brand_phone_id.find("_") + 1: brand_phone_id.find("-")].replace("_", " ")
+        print(brand_name, phone_name,                                   )
+        return render_template("delete_phone.html", phone_id=phone_id, brand_name=brand_name, phone_name=phone_name, title=f"Delete {brand_name} {phone_name}")
+    else:
+        if request.form.get("confirm_delete") == "NO":
+            return redirect(f"/phones/{brand_phone_id}")
+        else:  # confirm delete
+            
+            ## Colors
+            # get color ids
+            db.execute("""
+            SELECT color_id FROM phone_color WHERE phone_id = %s""",
+            (phone_id, )
+            )
+            color_ids = [row[0] for row in db.fetchall()]
+
+            # delete color connections
+            db.execute("""
+            DELETE FROM phone_color WHERE phone_id = %s""",
+            (phone_id, )
+            )
+            db_connection.commit()
+
+            # delete color if its not in any other phone
+            for id in color_ids:
+                db.execute("""
+                SELECT * FROM phone_color WHERE color_id = %s""",
+                (id, )
+                )
+                if not db.fetchone():
+                    db.execute("""
+                    DELETE FROM color WHERE id = %s""",
+                    (id, )
+                    )
+                    db_connection.commit()
+            flash("Successfully deleted colors data.", "success")
+
+            ## Sensors
+            # get sensor ids
+            db.execute("""
+            SELECT sensor_id FROM phone_sensor WHERE phone_id = %s""",
+            (phone_id, )
+            )
+            sensor_ids = [row[0] for row in db.fetchall()]
+
+            # delete sensor connections
+            db.execute("""
+            DELETE FROM phone_sensor WHERE phone_id = %s""",
+            (phone_id, )
+            )
+            db_connection.commit()
+
+            # delete sensor if its not in any other phone
+            for id in sensor_ids:
+                db.execute("""
+                SELECT * FROM phone_sensor WHERE sensor_id = %s""",
+                (id, )
+                )
+                if not db.fetchone():
+                    db.execute("""
+                    DELETE FROM sensor WHERE id = %s""",
+                    (id, )
+                    )
+                    db_connection.commit()
+            flash("Successfully deleted sensors data.", "success")
+
+            ## cameras
+            # get camera ids
+            db.execute("""
+            SELECT camera_id FROM phone_camera WHERE phone_id = %s""",
+            (phone_id, )
+            )
+            camera_ids = [row[0] for row in db.fetchall()]
+
+            # delete camera connections
+            db.execute("""
+            DELETE FROM phone_camera WHERE phone_id = %s""",
+            (phone_id, )
+            )
+            db_connection.commit()
+
+            # delete camera if its not in any other phone
+            for id in camera_ids:
+                db.execute("""
+                SELECT * FROM phone_camera WHERE camera_id = %s""",
+                (id, )
+                )
+                if not db.fetchone():
+                    db.execute("""
+                    DELETE FROM camera WHERE id = %s;""",
+                    (id, )
+                    )
+                    db_connection.commit()
+            flash("Successfully deleted cameras data.", "success")
+
+            db.execute("""
+            DELETE FROM phone WHERE id = %s""",
+            (phone_id, )
+            )
+            db_connection.commit()
+            flash("Successfully deleted all data for the phone.", "success")
+
+            return redirect("/phones")
+
 # @app.errorhandler(404)
 # def not_found_error(error):
 #     return render_template('404.html', pic=pic), 404
