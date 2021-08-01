@@ -137,12 +137,37 @@ def brands():
     for row in db_result:
         brands.append({"name": row[0], "logo_url": row[1]})
 
-    return render_template("brands.html", brands=brands)
+    return render_template("brands.html", brands=brands, title="Brands")
 
 
 @app.route("/brands/add", methods=["GET", "POST"])
 def add_brand():
-    pass
+    if request.method == "GET":
+        return render_template("add_brand.html", title="Add Brand")
+
+    else:  # request method is post
+        brand_name = request.form.get("brand_name")
+        brand_description = request.form.get("brand_description")  # or ""
+        brand_logo_url = request.form.get("brand_logo_url")  # or ""
+        if not brand_name:
+            flash("Can't leave brand name empty.")
+            return redirect("/brands/add")
+
+        db.execute("""
+        SELECT * FROM brand WHERE name = %s""",
+            (brand_name, ))
+        if db.fetchone():
+            flash("The brand you entered already exists", "error")
+            return redirect("/brands")
+
+        db.execute("""
+        INSERT INTO brand (name, description, logo_url)
+        VALUES (%s, %s, %s);""",
+        (brand_name, brand_description, brand_logo_url)
+        )
+        db_connection.commit()
+        flash("Successfully added brand", "success")
+        return redirect("/brands")
 
 
 @ app.route("/brands/<brand_name>")
@@ -189,6 +214,7 @@ def edit_brand(brand_name):
 def phones():
     db.execute(f"""
     SELECT brand_name, name, image_url, id FROM phone
+    ORDER BY name;
     """)
     db_result = db.fetchall()
     phones = []
@@ -215,7 +241,7 @@ def add_phone():
             SELECT * FROM brand WHERE name = %s""",
             (brand_name, ))
             if not db.fetchone():
-                flash("The brand you entered does not exist. Go to brands page and click Add Brand to add a new brand.")
+                flash("The brand you entered does not exist. Go to brands page and click Add Brand to add a new brand.", "error")
                 return redirect(f"/phones/add")
             image_url = request.form.get("image_url").strip()  # or ""
             os = request.form.get("os").strip()

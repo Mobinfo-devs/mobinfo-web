@@ -1,0 +1,13 @@
+{% from 'brand_form.html' import brand_form %}
+
+{% extends "layout.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h2> Add Brand </h2>
+
+{{ brand_form(type = 'add', action = '/brands/add') }}
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% macro brand_form(type, action, brand_name=None, brand_description=None, brand_logo_url=None) %}
+
+
+<form action={{ action }} method="POST">
+    {% if type == "add" %}
+    <label for="brand_name">Brand Name* </label> <br>
+    <textarea name="brand_name" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ brand_name if brand_name else ""}}</textarea>
+    <br> <br>
+    {% endif%}
+
+    <label for="brand_description">Brand Details: </label> <br>
+    <textarea name="brand_description" cols="100" rows="20" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'>{{ brand_description if brand_description else "" }}</textarea>
+    <br> <br>
+
+    <label for="brand_logo_url">Brand Logo Url: </label> <br>
+    <textarea name="brand_logo_url" cols="100" rows="1">{{ brand_logo_url if brand_logo_url else ""}}</textarea>
+    <br> <br>
+
+    <br><br>
+    <input type="submit" value="Save">
+</form>
+
+{%- endmacro %}
