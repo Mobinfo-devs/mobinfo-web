@@ -94,7 +94,6 @@ def signin():
     else:  # sign in form submitted
         user_name = request.form.get("username").strip()
         password = request.form.get("password")
-        print(user_name)
         # checking if user exists
         db.execute("""
         SELECT * FROM user
@@ -102,7 +101,6 @@ def signin():
                    (user_name,)
                    )
         user_row = db.fetchone()
-        print(user_row)
         if not user_row:  # if row exists where username is present
             flash("Invalid username", "error")
             return render_template("signin.html", title="Sign In")
@@ -141,7 +139,7 @@ def brands():
 
 
 @app.route("/brands/add", methods=["GET", "POST"])
-def add_brand():
+def brand_add():
     if request.method == "GET":
         return render_template("add_brand.html", title="Add Brand")
 
@@ -155,7 +153,7 @@ def add_brand():
 
         db.execute("""
         SELECT * FROM brand WHERE name = %s""",
-            (brand_name, ))
+                   (brand_name, ))
         if db.fetchone():
             flash("The brand you entered already exists", "error")
             return redirect("/brands")
@@ -163,8 +161,8 @@ def add_brand():
         db.execute("""
         INSERT INTO brand (name, description, logo_url)
         VALUES (%s, %s, %s);""",
-        (brand_name, brand_description, brand_logo_url)
-        )
+                   (brand_name, brand_description, brand_logo_url)
+                   )
         db_connection.commit()
         flash("Successfully added brand", "success")
         return redirect("/brands")
@@ -172,6 +170,7 @@ def add_brand():
 
 @ app.route("/brands/<brand_name>")
 def brand_details(brand_name):
+    brand_name = brand_name.replace("_", " ")
     # db_result = get_brand_details(brand_name)
     db.execute(f"""
     SELECT name, logo_url, description FROM brand
@@ -185,7 +184,8 @@ def brand_details(brand_name):
 
 
 @app.route("/brands/<brand_name>/edit", methods=["POST", "GET"])
-def edit_brand(brand_name):
+def brand_edit(brand_name):
+    brand_name = brand_name.replace("_", " ")
     if request.method == "GET":
         db.execute(f"""
         SELECT name, logo_url, description FROM brand
@@ -194,8 +194,8 @@ def edit_brand(brand_name):
         db_result = db.fetchone()
         if not db_result:
             return "Brand not found!"
-
-        return render_template("edit_brand.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
+        else:
+            return render_template("edit_brand.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
 
     else:  # method == POST
         brand_description = request.form.get("brand_description")  # or ""
@@ -208,6 +208,19 @@ def edit_brand(brand_name):
         db_connection.commit()
         flash("Data successfully updated", "success")
         return redirect(f"/brands/{brand_name}")
+
+
+@app.route("/brands/<brand_name>/delete", methods=["POST", "GET"])
+def brand_delete(brand_name):
+    brand_name = brand_name.replace("_", " ")
+    if request.method == "GET":
+        return render_template("delete_brand.html", brand_name=brand_name, title=f"Delete {brand_name}")
+    else:
+        if request.form.get("confirm_delete") == "NO":
+            return redirect(f"/brands/{brand_name}")
+        else:  # confirm delete
+            delete_brand(brand_name)
+            return redirect("/phones")
 
 
 @app.route("/phones")
@@ -226,7 +239,7 @@ def phones():
 
 
 @app.route("/phones/add", methods=["POST", "GET"])
-def add_phone():
+def phone_add():
     if request.method == "GET":
         return render_template("add_phone.html", title="Add Phone")
 
@@ -239,9 +252,10 @@ def add_phone():
                 return redirect(f"/phones/add")
             db.execute("""
             SELECT * FROM brand WHERE name = %s""",
-            (brand_name, ))
+                       (brand_name, ))
             if not db.fetchone():
-                flash("The brand you entered does not exist. Go to brands page and click Add Brand to add a new brand.", "error")
+                flash(
+                    "The brand you entered does not exist. Go to brands page and click Add Brand to add a new brand.", "error")
                 return redirect(f"/phones/add")
             image_url = request.form.get("image_url").strip()  # or ""
             os = request.form.get("os").strip()
@@ -249,10 +263,13 @@ def add_phone():
             cpu = request.form.get("cpu").strip()
             chipset = request.form.get("chipset").strip()
             display_technology = request.form.get("display_technology").strip()
-            screen_size_inches = float(request.form.get("screen_size_inches").strip())
+            screen_size_inches = float(
+                request.form.get("screen_size_inches").strip())
             display_resolution = request.form.get("display_resolution").strip()
-            extra_display_features = request.form.get("extra_display_features").strip()
-            built_in_memory_gb = int(request.form.get("built_in_memory_gb").strip())
+            extra_display_features = request.form.get(
+                "extra_display_features").strip()
+            built_in_memory_gb = int(
+                request.form.get("built_in_memory_gb").strip())
             ram_gb = int(request.form.get("ram_gb").strip())
             front_cameras = [int(mp) for mp in eval(
                 request.form.get("front_cameras"))]
@@ -274,12 +291,12 @@ def add_phone():
         display_resolution, extra_display_features, built_in_memory_GB, ram_GB, battery_capacity_mah, price_rupees)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
         """,
-                (brand_name, phone_name, image_url, os, weight_grams, cpu, chipset, display_technology, screen_size_inches, 
-        display_resolution, extra_display_features, built_in_memory_gb, ram_gb, battery_capacity_mah, price_rupees)
-        )
+                   (brand_name, phone_name, image_url, os, weight_grams, cpu, chipset, display_technology, screen_size_inches,
+                    display_resolution, extra_display_features, built_in_memory_gb, ram_gb, battery_capacity_mah, price_rupees)
+                   )
         db_connection.commit()
         flash("Successfully added to phone table", "success")
-        
+
         # get id of the new phone from database
         db.execute("""
             SELECT id FROM phone
@@ -400,7 +417,6 @@ def add_phone():
         flash("Successfully added all rear cameras", "success")
 
         for camera_mp in front_cameras:
-            print(camera_mp)
             # Check if camera exists, if not insert it
             db.execute("""
                 SELECT id FROM camera
@@ -510,7 +526,7 @@ def phone_details(brand_phone_id):
 
 
 @app.route("/phones/<brand_phone_id>/edit", methods=["POST", "GET"])
-def edit_phone(brand_phone_id):
+def phone_edit(brand_phone_id):
     # TODO: protect against bogus link (invalid format)
     phone_id = int(brand_phone_id[brand_phone_id.find("-") + 1:])
     # TODO: Also get phone name and brand name and check them while fetching from db
@@ -591,10 +607,13 @@ def edit_phone(brand_phone_id):
             cpu = request.form.get("cpu").strip()
             chipset = request.form.get("chipset").strip()
             display_technology = request.form.get("display_technology").strip()
-            screen_size_inches = float(request.form.get("screen_size_inches").strip())
+            screen_size_inches = float(
+                request.form.get("screen_size_inches").strip())
             display_resolution = request.form.get("display_resolution").strip()
-            extra_display_features = request.form.get("extra_display_features").strip()
-            built_in_memory_gb = int(request.form.get("built_in_memory_gb").strip())
+            extra_display_features = request.form.get(
+                "extra_display_features").strip()
+            built_in_memory_gb = int(
+                request.form.get("built_in_memory_gb").strip())
             ram_gb = int(request.form.get("ram_gb").strip())
             front_cameras = [int(mp) for mp in eval(
                 request.form.get("front_cameras"))]
@@ -747,7 +766,6 @@ def edit_phone(brand_phone_id):
             db_connection.commit()
 
         for camera_mp in front_cameras:
-            print(camera_mp)
             # Check if camera exists, if not insert it
             db.execute("""
                 SELECT id FROM camera
@@ -787,112 +805,19 @@ def edit_phone(brand_phone_id):
 
 
 @app.route("/phones/<brand_phone_id>/delete", methods=["POST", "GET"])
-def delete_phone(brand_phone_id):
+def phone_delete(brand_phone_id):
     phone_id = int(brand_phone_id[brand_phone_id.find("-") + 1:])
     if request.method == "GET":
-        brand_name = brand_phone_id[: brand_phone_id.find("_")].replace("_", " ")
-        phone_name = brand_phone_id[brand_phone_id.find("_") + 1: brand_phone_id.find("-")].replace("_", " ")
-        print(brand_name, phone_name,                                   )
+        brand_name = brand_phone_id[: brand_phone_id.find(
+            "_")].replace("_", " ")
+        phone_name = brand_phone_id[brand_phone_id.find(
+            "_") + 1: brand_phone_id.find("-")].replace("_", " ")
         return render_template("delete_phone.html", phone_id=phone_id, brand_name=brand_name, phone_name=phone_name, title=f"Delete {brand_name} {phone_name}")
     else:
         if request.form.get("confirm_delete") == "NO":
             return redirect(f"/phones/{brand_phone_id}")
         else:  # confirm delete
-            
-            ## Colors
-            # get color ids
-            db.execute("""
-            SELECT color_id FROM phone_color WHERE phone_id = %s""",
-            (phone_id, )
-            )
-            color_ids = [row[0] for row in db.fetchall()]
-
-            # delete color connections
-            db.execute("""
-            DELETE FROM phone_color WHERE phone_id = %s""",
-            (phone_id, )
-            )
-            db_connection.commit()
-
-            # delete color if its not in any other phone
-            for id in color_ids:
-                db.execute("""
-                SELECT * FROM phone_color WHERE color_id = %s""",
-                (id, )
-                )
-                if not db.fetchone():
-                    db.execute("""
-                    DELETE FROM color WHERE id = %s""",
-                    (id, )
-                    )
-                    db_connection.commit()
-            flash("Successfully deleted colors data.", "success")
-
-            ## Sensors
-            # get sensor ids
-            db.execute("""
-            SELECT sensor_id FROM phone_sensor WHERE phone_id = %s""",
-            (phone_id, )
-            )
-            sensor_ids = [row[0] for row in db.fetchall()]
-
-            # delete sensor connections
-            db.execute("""
-            DELETE FROM phone_sensor WHERE phone_id = %s""",
-            (phone_id, )
-            )
-            db_connection.commit()
-
-            # delete sensor if its not in any other phone
-            for id in sensor_ids:
-                db.execute("""
-                SELECT * FROM phone_sensor WHERE sensor_id = %s""",
-                (id, )
-                )
-                if not db.fetchone():
-                    db.execute("""
-                    DELETE FROM sensor WHERE id = %s""",
-                    (id, )
-                    )
-                    db_connection.commit()
-            flash("Successfully deleted sensors data.", "success")
-
-            ## cameras
-            # get camera ids
-            db.execute("""
-            SELECT camera_id FROM phone_camera WHERE phone_id = %s""",
-            (phone_id, )
-            )
-            camera_ids = [row[0] for row in db.fetchall()]
-
-            # delete camera connections
-            db.execute("""
-            DELETE FROM phone_camera WHERE phone_id = %s""",
-            (phone_id, )
-            )
-            db_connection.commit()
-
-            # delete camera if its not in any other phone
-            for id in camera_ids:
-                db.execute("""
-                SELECT * FROM phone_camera WHERE camera_id = %s""",
-                (id, )
-                )
-                if not db.fetchone():
-                    db.execute("""
-                    DELETE FROM camera WHERE id = %s;""",
-                    (id, )
-                    )
-                    db_connection.commit()
-            flash("Successfully deleted cameras data.", "success")
-
-            db.execute("""
-            DELETE FROM phone WHERE id = %s""",
-            (phone_id, )
-            )
-            db_connection.commit()
-            flash("Successfully deleted all data for the phone.", "success")
-
+            delete_phone(phone_id)
             return redirect("/phones")
 
 # @app.errorhandler(404)
@@ -900,4 +825,116 @@ def delete_phone(brand_phone_id):
 #     return render_template('404.html', pic=pic), 404
 
 
+def delete_phone(phone_id):
+    # Colors
+    # get color ids
+    db.execute("""
+    SELECT color_id FROM phone_color WHERE phone_id = %s""",
+               (phone_id, )
+               )
+    color_ids = [row[0] for row in db.fetchall()]
+
+    # delete color connections
+    db.execute("""
+    DELETE FROM phone_color WHERE phone_id = %s""",
+               (phone_id, )
+               )
+    db_connection.commit()
+
+    # delete color if its not in any other phone
+    for id in color_ids:
+        db.execute("""
+        SELECT * FROM phone_color WHERE color_id = %s""",
+                   (id, )
+                   )
+        if not db.fetchone():
+            db.execute("""
+            DELETE FROM color WHERE id = %s""",
+                       (id, )
+                       )
+            db_connection.commit()
+    flash("Successfully deleted colors data.", "success")
+
+    # Sensors
+    # get sensor ids
+    db.execute("""
+    SELECT sensor_id FROM phone_sensor WHERE phone_id = %s""",
+               (phone_id, )
+               )
+    sensor_ids = [row[0] for row in db.fetchall()]
+
+    # delete sensor connections
+    db.execute("""
+    DELETE FROM phone_sensor WHERE phone_id = %s""",
+               (phone_id, )
+               )
+    db_connection.commit()
+
+    # delete sensor if its not in any other phone
+    for id in sensor_ids:
+        db.execute("""
+        SELECT * FROM phone_sensor WHERE sensor_id = %s""",
+                   (id, )
+                   )
+        if not db.fetchone():
+            db.execute("""
+            DELETE FROM sensor WHERE id = %s""",
+                       (id, )
+                       )
+            db_connection.commit()
+    flash("Successfully deleted sensors data.", "success")
+
+    # cameras
+    # get camera ids
+    db.execute("""
+    SELECT camera_id FROM phone_camera WHERE phone_id = %s""",
+               (phone_id, )
+               )
+    camera_ids = [row[0] for row in db.fetchall()]
+
+    # delete camera connections
+    db.execute("""
+    DELETE FROM phone_camera WHERE phone_id = %s""",
+               (phone_id, )
+               )
+    db_connection.commit()
+
+    # delete camera if its not in any other phone
+    for id in camera_ids:
+        db.execute("""
+        SELECT * FROM phone_camera WHERE camera_id = %s""",
+                   (id, )
+                   )
+        if not db.fetchone():
+            db.execute("""
+            DELETE FROM camera WHERE id = %s;""",
+                       (id, )
+                       )
+            db_connection.commit()
+    flash("Successfully deleted cameras data.", "success")
+
+    db.execute("""
+    DELETE FROM phone WHERE id = %s""",
+               (phone_id, )
+               )
+    db_connection.commit()
+    flash("Successfully deleted all data for the phone.", "success")
+
+
+def delete_brand(brand_name):
+    # deleting all phones of the brand
+    db.execute("""
+    SELECT id FROM phone WHERE brand_name = %s""",
+    (brand_name, ))
+    phone_ids = [row[0] for row in db.fetchall()]
+    for phone_id in phone_ids:
+        delete_phone(phone_id)
+    flash("Deleted all phones of the brand successfully.", "success")
+    db.execute("""
+    DELETE FROM brand WHERE name = %s""",
+    (brand_name, ))
+    db_connection.commit()
+    flash("Deleted brand successfully.", "success")
+
+    
 app.run(debug=True)

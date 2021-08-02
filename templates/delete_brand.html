@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+ 
+
+{% block body %}
+<h2 style="color: red;"> Are you sure you want to delete {{ brand_name }}? <br>
+All of the brand's phone will be deleted too. <br>
+This action can not be undone. </h2>
+<form action="{{'/brands/' + '_'.join(brand_name.split()) + '/delete'}}" method="POST">
+    <input type="submit" name="confirm_delete" value="NO">
+    <input type="submit" name="confirm_delete" value="YES">
+</form>
+{% endblock %}

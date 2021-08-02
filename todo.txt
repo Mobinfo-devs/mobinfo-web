@@ -12,10 +12,10 @@
     a) html file with text area for all brand details (DONE) 
     b) python function (DONE)
 
-! delete phone feature (on edit phone page)
+! delete phone feature (on edit phone page) (DONE)
 
-! Delete brand feature (on edit brand page)
-    > give warning that all phones of the brand will be yeeted too
+! Delete brand feature (on edit brand page) (DONE)
+    > give warning that all phones of the brand will be yeeted too (DONE)
 
 ! News
     a) collect news (how? add to excel first?)

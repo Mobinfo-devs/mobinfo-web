@@ -15,7 +15,7 @@
     <p> {{ brand_description }} </p>
 </div>
 
-{{ admin_component(type='edit', text='Edit brand', route="/brands/" + brand_name + "/edit") }}
+{{ admin_component(type='edit', text='Edit brand', route="/brands/" + "_".join(brand_name.split()) + "/edit") }}
 
 </div>
 {% endblock %}
