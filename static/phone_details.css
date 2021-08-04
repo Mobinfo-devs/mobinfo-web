@@ -4,6 +4,7 @@ table {
     border: 3px solid hsl(194, 60%, 34%);
     border-radius: 5px;
     }
+
   .eighty {
     width: 80%;
   }
@@ -23,6 +24,73 @@ table {
     padding-bottom: 10px;
     padding-left: 8px;
     background-color: hsla(174, 60%, 34%, 0.267);
+  }
+
+  .addreview
+  {
+    position: relative;
+    margin-left: 40px;
+    margin-right: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 3px solid  hsl(200, 60%, 34%);
+    border-radius: 5px;
+    background-color: rgb(198, 224, 221);
+    height: 40px;
+    text-align: center;
+  }
+
+  .addreview:hover
+  {
+    background-color: rgb(175, 228, 222);
+  }
+
+  .addreview img
+  {
+    position: absolute;
+    top: 30%; left: 50%;
+    transform: translate(-50%,-50%);
+    /* border-radius: 5px; */
+  }
+
+  .reviews
+  {
+    border: 3px solid hsl(194, 60%, 34%);
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 40px;
+    margin-right: 40px;
+    padding: 5px;
+    background-color: hsla(200, 60%, 34%, 0.75);
+  }
+
+  .reviewcard
+  {
+    border: 3px solid  hsl(200, 60%, 34%);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    background-color: rgb(198, 224, 221);
+    padding: 4px;
+  }
+
+  .reviewcard h5, h6, p{
+    margin: 0;
+  }
+
+  .reviewcard p 
+  {
+    font-size: small;
+    white-space: break-space;
+  }
+
+  .delete_icon
+  {
+    /* position: absolute;
+    left: 100%; */
+    float: right;
+    width: 1.25em;
   }
 
   

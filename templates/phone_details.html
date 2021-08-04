@@ -116,4 +116,31 @@ text='Edit phone details',
 route="/phones/" + '_'.join(phone_details['brand_name'].split())  + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/edit") 
 }}
 
+<h2> Reviews </h2>
+
+<a href={{ '/phones/' + '_'.join(phone_details['brand_name'].split())  + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/add-review"}}>
+  <div class="addreview">
+    <img src={{ url_for('static', filename='images/add_icon.svg' ) }}>
+    <br>
+    <p style="color: black;"> Add a review </p>
+    </div>
+</a>
+
+
+<div class="reviews">
+  {% for review in reviews %}
+  <div class="reviewcard">
+    {% if session.user_name == review["username"] %}
+    <img name="delete_img" class="delete_icon" src={{ url_for('static', filename='images/delete_icon.svg' ) }}>
+    {% endif %}
+    <h5> Name: {{ review["firstname"] }} {{ review["lastname"] }} </h5>
+    <h6> Username: {{ review["username"] }} </h6>
+    <p> <b> Rating: </b> {{ review["rating"] }} / 5 </p>
+    {% if review["review_text"] %}
+    <p> <b>Review: </b> {{ review["review_text"] }} </p>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
 {% endblock %}

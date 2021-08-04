@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1> Add Review For {{ brand_name }} {{ phone_name }}</h1>
+
+<form action={{ '/phones/' + '_'.join(brand_name.split())  + '_' + '_'.join(phone_name.split()) + "-" + phone_id|string + "/add-review"}} method="POST">
+    <input type="text" name="username" value={{ session.user_name }} hidden>
+    <label for="rating">Rating </label> <br>
+    <select name="rating" required>
+        <option selected disabled hidden value="">Select</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <br> <br>
+
+    <label for="review">Review </label> <br>
+    <textarea name="review" cols="100" rows="5" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+    <br> <br>
+
+    <input type="submit" value="Submit">
+</form>
+
+
+{% endblock %}

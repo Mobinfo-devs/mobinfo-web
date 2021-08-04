@@ -522,7 +522,24 @@ def phone_details(brand_phone_id):
     phone_details["front_cameras"] = [row[0]
                                       for row in camera_rows if row[1] == "front"]
 
-    return render_template("phone_details.html", title=f"Specicifications - {phone_details['brand_name']} {phone_details['phone_name']}", phone_details=phone_details)
+    # Reviews
+    db.execute("""
+    SELECT user.username, firstname, lastname, rating, review_text, submission_date_time 
+    FROM user INNER JOIN review ON user.username = review.username
+    WHERE phone_id = %s
+    ORDER BY submission_date_time DESC;""",
+    (phone_id, ))
+    reviews = []
+    for row in db.fetchall():
+        reviews.append({
+            "username": row[0],
+            "firstname": row[1],
+            "lastname": row[2],
+            "rating": row[3],
+            "review_text": row[4],
+            "submission_date_time": row[5]
+        })
+    return render_template("phone_details.html", title=f"Specicifications - {phone_details['brand_name']} {phone_details['phone_name']}", phone_details=phone_details, reviews=reviews)
 
 
 @app.route("/phones/<brand_phone_id>/edit", methods=["POST", "GET"])
@@ -820,6 +837,31 @@ def phone_delete(brand_phone_id):
             delete_phone(phone_id)
             return redirect("/phones")
 
+
+@app.route("/phones/<brand_phone_id>/add-review", methods=["POST", "GET"])
+def review_add(brand_phone_id):
+    phone_id = int(brand_phone_id[brand_phone_id.find("-") + 1:])
+    if request.method == "GET":
+        brand_name = brand_phone_id[: brand_phone_id.find("_")].replace("_", " ")
+        phone_name = brand_phone_id[brand_phone_id.find("_") + 1: brand_phone_id.find("-")].replace("_", " ")
+        return render_template("add_review.html", phone_id=phone_id, brand_name=brand_name, phone_name=phone_name, title="Add Review")
+
+    else:  # method == POST
+        username = request.form.get("username")
+        rating = int(request.form.get("rating"))
+        review = request.form.get("review").strip()
+        if review == "":
+            review = None
+        db.execute("""
+        INSERT INTO review (rating, review_text, username, phone_id)
+        VALUES (%s, %s, %s, %s)""",
+        (rating, review, username, phone_id))
+        db_connection.commit()
+        flash("Successfully added review", "success")
+        print("HERE")
+        return redirect(f"/phones/{brand_phone_id}")
+
+        
 # @app.errorhandler(404)
 # def not_found_error(error):
 #     return render_template('404.html', pic=pic), 404
@@ -925,16 +967,16 @@ def delete_brand(brand_name):
     # deleting all phones of the brand
     db.execute("""
     SELECT id FROM phone WHERE brand_name = %s""",
-    (brand_name, ))
+               (brand_name, ))
     phone_ids = [row[0] for row in db.fetchall()]
     for phone_id in phone_ids:
         delete_phone(phone_id)
     flash("Deleted all phones of the brand successfully.", "success")
     db.execute("""
     DELETE FROM brand WHERE name = %s""",
-    (brand_name, ))
+               (brand_name, ))
     db_connection.commit()
     flash("Deleted brand successfully.", "success")
 
-    
+
 app.run(debug=True)

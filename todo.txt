@@ -26,7 +26,6 @@
 
     c) html page for specific news 
         > css page too? somewhat like brand_details?
-    
 
 ! reviews
     a) show reviews under phone sorted by date with rating, reviewer name, text (maybe not all reviews?)

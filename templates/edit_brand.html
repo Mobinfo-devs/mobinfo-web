@@ -9,7 +9,7 @@
 {% block body %}
 <h2> Edit Brand ({{ brand_name }}) </h2>
 
-{{ brand_form(brand_name = brand_name, brand_description = brand_description, brand_logo_url = brand_logo_url, type = 'edit', action = '/brands/'+ brand_name + "/edit" ) }}
+{{ brand_form(brand_name = brand_name, brand_description = brand_description, brand_logo_url = brand_logo_url, type = 'edit', action = '/brands/'+ '_'.join(brand_name.split()) + "/edit" ) }}
 
 {{
     admin_component(type="delete",

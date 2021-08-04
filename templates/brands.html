@@ -15,7 +15,7 @@
 <section class="brands-grid">
 
    {% for brand in brands %}
-   <a href = "/brands/{{ brand['name'] }}">
+   <a href = "/brands/{{ '_'.join(brand['name'].split()) }}">
       <div class = "brandcard">
          <h3> {{ brand["name"] }} </h3>
          <div class = brandcardimage>
