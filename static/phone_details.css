@@ -85,12 +85,11 @@ table {
     white-space: break-space;
   }
 
-  .delete_icon
+  .delete_btn
   {
-    /* position: absolute;
-    left: 100%; */
+    background: none;
     float: right;
-    width: 1.25em;
+    border-radius: 20%;
   }
 
   

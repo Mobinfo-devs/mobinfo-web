@@ -5,6 +5,7 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='phone_details.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> <!-- jquery -->
 {% endblock %}
 
 {% block body %}
@@ -129,10 +130,12 @@ route="/phones/" + '_'.join(phone_details['brand_name'].split())  + '_' + '_'.jo
 
 <div class="reviews">
   {% for review in reviews %}
-  <div class="reviewcard">
+  <div class="reviewcard" id="username-{{ review['username'] }}_phone_id-{{ phone_details['id']}}_submission-{{ review['submission_date_time'] }}">
     {% if session.user_name == review["username"] %}
-    <img name="delete_img" class="delete_icon" src={{ url_for('static', filename='images/delete_icon.svg' ) }}>
-    {% endif %}
+    <button  class="delete_btn">
+      <img name="delete_img" class="delete_icon" src={{ url_for('static', filename='images/delete_icon.svg' ) }}>
+    </button>
+    {% endif %} 
     <h5> Name: {{ review["firstname"] }} {{ review["lastname"] }} </h5>
     <h6> Username: {{ review["username"] }} </h6>
     <p> <b> Rating: </b> {{ review["rating"] }} / 5 </p>
@@ -142,5 +145,27 @@ route="/phones/" + '_'.join(phone_details['brand_name'].split())  + '_' + '_'.jo
   </div>
   {% endfor %}
 </div>
+
+<script>
+  let delete_btns = document.querySelectorAll(".delete_btn");  // get all buttons
+  for (let i = 0; i < delete_btns.length; i++)  // for each button
+  {
+      let current_btn = delete_btns[i];
+      let review_id = current_btn.parentNode.id;
+      console.log(review_id);
+      let username = review_id.slice( (review_id.indexOf("username-") + "username-".length), review_id.indexOf("phone_id-") - 1);
+      let phone_id = review_id.slice( (review_id.indexOf("phone_id-") + "phone_id-".length), review_id.indexOf("submission-") - 1);
+      let submission_date_time = review_id.slice( (review_id.indexOf("submission-") + "submission-".length) );
+      current_btn.addEventListener("click", function () {
+        document.getElementById(review_id).innerHTML = "Deleting...";
+        console.log(username, phone_id, submission_date_time);
+        $.post("/delete-review", { username: username, phone_id: phone_id, submission_date_time: submission_date_time }, function (data, status) {
+          console.log(data);
+          console.log(status);
+          console.log("#"+review_id);
+      });
+    });
+  }
+  </script>
 
 {% endblock %}
