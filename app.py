@@ -870,15 +870,11 @@ def delete_review():
     username = request.form.get("username")
     phone_id = int(request.form.get("phone_id"))
     submission_date_time = request.form.get("submission_date_time").strip()
-    # submission_date_time = strptime(submission_date_time, '%Y-%m-%d %H:%M:%S')
-    # submission_date_time = strftime('%Y-%m-%d %H:%M:%S', submission_date_time)
     db.execute("""
-    SELECT * FROM review WHERE username=%s AND phone_id=%s AND submission_date_time=%s;""",
+    DELETE FROM review WHERE username=%s AND phone_id=%s AND submission_date_time=%s;""",
     (username, phone_id, submission_date_time))
-    db_result = db.fetchall()
-    print(db_result, 12)
-    print(submission_date_time, username, phone_id)
-    return str(db_result)
+    db_connection.commit()
+    return ""
 
 # @app.errorhandler(404)
 # def not_found_error(error):

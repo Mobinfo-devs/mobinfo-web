@@ -152,17 +152,21 @@ route="/phones/" + '_'.join(phone_details['brand_name'].split())  + '_' + '_'.jo
   {
       let current_btn = delete_btns[i];
       let review_id = current_btn.parentNode.id;
-      console.log(review_id);
       let username = review_id.slice( (review_id.indexOf("username-") + "username-".length), review_id.indexOf("phone_id-") - 1);
       let phone_id = review_id.slice( (review_id.indexOf("phone_id-") + "phone_id-".length), review_id.indexOf("submission-") - 1);
       let submission_date_time = review_id.slice( (review_id.indexOf("submission-") + "submission-".length) );
       current_btn.addEventListener("click", function () {
-        document.getElementById(review_id).innerHTML = "Deleting...";
-        console.log(username, phone_id, submission_date_time);
-        $.post("/delete-review", { username: username, phone_id: phone_id, submission_date_time: submission_date_time }, function (data, status) {
-          console.log(data);
-          console.log(status);
-          console.log("#"+review_id);
+        let review = document.getElementById(review_id);
+        review.innerHTML = "Deleting..."
+        $.post("/delete-review", { username: username, phone_id: phone_id, submission_date_time: submission_date_time}, function (data, status) {
+          if (status == "success")
+          {
+            review.remove();
+          }
+          else
+          {
+            review.innerHTML = "Could not delete. Please refresh the page and try again.";
+          }
       });
     });
   }
