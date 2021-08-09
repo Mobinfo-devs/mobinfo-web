@@ -1,0 +1,39 @@
+{% from 'layout.html' import admin_component  %}
+
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='all_news.css') }}">
+{% endblock %}
+
+
+{% block body %}
+<h1 style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: min-content;"> Brands </h1>
+<p> Click on any brand to know more about it. </p>
+<hr>
+
+<section class="news-grid">
+
+   {% for article in news %}
+   <a href = "#">
+      <div class = "newscard">
+         <h3> {{ article["heading"] }} </h3>
+         <div class = newscardimage>
+            <img src = {{ article["image_url"] }} >
+         </div>
+         <p> {{ article["news_text"] }} </p>
+      </div>
+   </a>
+   {% endfor %}
+
+</section>
+
+{{
+   admin_component(type="add",
+   text='Add new brand',
+   route="/brands/add")
+}}
+
+{% endblock %}
+
+<!-- https://logos-download.com/6609-xiaomi-logo-download.html -->

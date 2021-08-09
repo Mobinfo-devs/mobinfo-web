@@ -27,10 +27,10 @@
     c) html page for specific news 
         > css page too? somewhat like brand_details?
 
-! reviews
+! reviews (DONE)
     a) show reviews under phone sorted by date with rating, reviewer name, text (maybe not all reviews?)
-        >show option to delete a review (mayyyyybee edit? nah? maybe??)
-    b) add option to add review if logged in
+        >show option to delete a review (mayyyyybee edit? nah? maybe??)  (DONE)
+    b) add option to add review if logged in (DONE)
 
 ! feature of liking phones
     a) heart button...

@@ -1,0 +1,63 @@
+/* @import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap'); */
+
+
+.newscard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background: #353535; */
+    border: 3px solid hsl(194, 60%, 34%);
+    background: hsla(150, 60%, 34%, 0.199);
+    /* font-size: 1rem; */
+    color:hsl(194, 60%, 34%);
+    box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    transition: all 500ms;
+    overflow: hidden;
+      padding-bottom: 0.5em;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+ }
+
+ .newscardimage
+ {
+    /* width: 100px;
+    height: 120px; */
+    /* background: white; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* box-shadow: 0 0  5px white; */
+    border-radius: 5px;
+    margin: 0.5em;
+    border: 2px solid black;
+ }
+ 
+ .newscardimage img
+ {
+    /* height: 100px; */
+    width: 50%;
+    /* height: inherit; */
+     /* border: 2px solid black; */
+     /* position: absolute; */
+     /* clip: rect(0, 00px, 100px, 0); */
+ }
+  
+.newscard:hover {
+    box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
+    transform: translateY(-3px) scale(1.1);
+ }
+
+ .news-grid {
+    margin-right: 150px;
+    margin-left: 150px;
+    padding: 30px;
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+ }

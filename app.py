@@ -863,6 +863,21 @@ def review_add(brand_phone_id):
         print("HERE")
         return redirect(f"/phones/{brand_phone_id}")
 
+
+@app.route("/news")
+def all_news():
+    db.execute("""
+    SELECT heading, image_url, CONCAT(SUBSTRING(news_text, 1, 500), ".....") AS news_text
+    FROM news;""")
+    db_result = db.fetchall()
+    news = []
+    for row in db_result:
+        news.append({
+            "heading": row[0],
+            "image_url": row[1],
+            "news_text": row[2]
+        })
+    return render_template("all_news.html", news=news)
         
 
 @app.route("/delete-review", methods=["POST"])
