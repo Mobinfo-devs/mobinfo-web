@@ -541,7 +541,22 @@ def phone_details(brand_phone_id):
             "review_text": row[4],
             "submission_date_time": row[5]
         })
-    return render_template("phone_details.html", title=f"Specicifications - {phone_details['brand_name']} {phone_details['phone_name']}", phone_details=phone_details, reviews=reviews)
+
+    # favourite
+    is_favourite = None
+    if session.get("user_name"):  # user logged in
+        print("HHH")
+        db.execute("""
+        SELECT * FROM favourite
+        WHERE phone_id = %s AND username = %s;""",
+        (phone_id, session.get("user_name")))
+        if db.fetchone():
+            is_favourite = True
+        else:
+            is_favourite = False
+    print(is_favourite)
+
+    return render_template("phone_details.html", title=f"Specicifications - {phone_details['brand_name']} {phone_details['phone_name']}", phone_details=phone_details, reviews=reviews, is_favourite=is_favourite)
 
 
 @app.route("/phones/<brand_phone_id>/edit", methods=["POST", "GET"])
@@ -930,6 +945,22 @@ def delete_review():
     db_connection.commit()
     return ""
 
+
+@app.route("/favouriteify_phone", methods=["POST"])
+def favouriteify_phone():
+    phone_id = request.form.get("phone_id")
+    if request.form.get("is_favourite") == 'true':  # if is favourite then unfavourite
+        db.execute("""DELETE FROM  favourite
+        WHERE username = %s AND phone_id = %s;""",
+        (session.get("user_name"), phone_id))
+    else:  # if not favourite then make favourite
+        db.execute("""
+        INSERT INTO favourite (username, phone_id) 
+        VALUES (%s, %s);
+        """,
+                   (session.get("user_name"), phone_id))
+    db_connection.commit()
+    return ""
 # @app.errorhandler(404)
 # def not_found_error(error):
 #     return render_template('404.html', pic=pic), 404

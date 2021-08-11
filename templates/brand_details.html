@@ -7,6 +7,9 @@
 {% endblock %}
 
 {% block body %}
+
+{{ admin_component(type='edit', text='Edit brand', route="/brands/" + "_".join(brand_name.split()) + "/edit") }}
+
 <div class="brand_details">
     <h1> {{ brand_name }} </h1>
     <div class="brand_image">
@@ -15,7 +18,6 @@
     <p> {{ brand_description }} </p>
 </div>
 
-{{ admin_component(type='edit', text='Edit brand', route="/brands/" + "_".join(brand_name.split()) + "/edit") }}
 
 </div>
 {% endblock %}

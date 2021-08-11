@@ -6,8 +6,12 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='brands.css') }}">
 {% endblock %}
 
-
 {% block body %}
+{{
+   admin_component(type="add",
+   text='Add new brand',
+   route="/brands/add")
+}}
 <h1 style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: min-content;"> Brands </h1>
 <p> Click on any brand to know more about it. </p>
 <hr>
@@ -27,11 +31,6 @@
 
 </section>
 
-{{
-   admin_component(type="add",
-   text='Add new brand',
-   route="/brands/add")
-}}
 
 {% endblock %}
 

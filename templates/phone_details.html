@@ -1,4 +1,4 @@
-{% from 'layout.html' import admin_component  %}
+{% from 'layout.html' import admin_component %}
 
 {% extends "layout.html" %}
 
@@ -9,10 +9,34 @@
 {% endblock %}
 
 {% block body %}
+{{
+admin_component(type="edit",
+text='Edit phone details',
+route="/phones/" + '_'.join(phone_details['brand_name'].split()) + '_' + '_'.join(phone_details['phone_name'].split()) +
+"-" + phone_details['id']|string + "/edit")
+}}
 <h1
   style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: max-content;">
   {{ phone_details["brand_name"] }} {{ phone_details["phone_name"] }}
 </h1>
+
+{% if session.user_name %}
+<button id='phoneid-{{ phone_details["id"] }}' class="fav_btn">
+  {% if is_favourite %}
+  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-heart-fill"
+    viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+  </svg>
+  {% else %}
+  <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-heart"
+    viewBox="0 0 16 16">
+    <path
+      d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+  </svg>
+  {% endif %}
+</button>
+{% endif %}
+
 <img src={{ phone_details['image_url'] }} style="height: 200px;"
   alt="{{ phone_details['brand_name'] }} {{ phone_details['phone_name'] }} image">
 <hr>
@@ -111,31 +135,32 @@
   </table>
 </div>
 
-{{
-admin_component(type="edit",
-text='Edit phone details',
-route="/phones/" + '_'.join(phone_details['brand_name'].split())  + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/edit") 
-}}
 
 <h2> Reviews </h2>
+{% if not reviews %}
+<h4> No reviews for this phone yet. </h4>
+{% else %}
 
-<a href={{ '/phones/' + '_'.join(phone_details['brand_name'].split())  + '_' + '_'.join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/add-review"}}>
+{% if session.user_name %}
+<a href={{ '/phones/' + '_' .join(phone_details['brand_name'].split()) + '_' + '_'
+  .join(phone_details['phone_name'].split()) + "-" + phone_details['id']|string + "/add-review" }}>
   <div class="addreview">
     <img src={{ url_for('static', filename='images/add_icon.svg' ) }}>
     <br>
     <p style="color: black;"> Add a review </p>
-    </div>
+  </div>
 </a>
-
+{% endif %}
 
 <div class="reviews">
   {% for review in reviews %}
-  <div class="reviewcard" id="username-{{ review['username'] }}_phone_id-{{ phone_details['id']}}_submission-{{ review['submission_date_time'] }}">
+  <div class="reviewcard"
+    id="username-{{ review['username'] }}_phone_id-{{ phone_details['id']}}_submission-{{ review['submission_date_time'] }}">
     {% if session.user_name == review["username"] %}
-    <button  class="delete_btn">
+    <button class="delete_btn">
       <img name="delete_img" class="delete_icon" src={{ url_for('static', filename='images/delete_icon.svg' ) }}>
     </button>
-    {% endif %} 
+    {% endif %}
     <h5> Name: {{ review["firstname"] }} {{ review["lastname"] }} </h5>
     <h6> Username: {{ review["username"] }} </h6>
     <p> <b> Rating: </b> {{ review["rating"] }} / 5 </p>
@@ -145,31 +170,56 @@ route="/phones/" + '_'.join(phone_details['brand_name'].split())  + '_' + '_'.jo
   </div>
   {% endfor %}
 </div>
-
+{% endif %}
 <script>
+
+  // delete feature
   let delete_btns = document.querySelectorAll(".delete_btn");  // get all buttons
   for (let i = 0; i < delete_btns.length; i++)  // for each button
   {
-      let current_btn = delete_btns[i];
-      let review_id = current_btn.parentNode.id;
-      let username = review_id.slice( (review_id.indexOf("username-") + "username-".length), review_id.indexOf("phone_id-") - 1);
-      let phone_id = review_id.slice( (review_id.indexOf("phone_id-") + "phone_id-".length), review_id.indexOf("submission-") - 1);
-      let submission_date_time = review_id.slice( (review_id.indexOf("submission-") + "submission-".length) );
-      current_btn.addEventListener("click", function () {
-        let review = document.getElementById(review_id);
-        review.innerHTML = "Deleting..."
-        $.post("/delete-review", { username: username, phone_id: phone_id, submission_date_time: submission_date_time}, function (data, status) {
-          if (status == "success")
-          {
-            review.remove();
-          }
-          else
-          {
-            review.innerHTML = "Could not delete. Please refresh the page and try again.";
-          }
+    let current_btn = delete_btns[i];
+    let review_id = current_btn.parentNode.id;
+    let username = review_id.slice((review_id.indexOf("username-") + "username-".length), review_id.indexOf("phone_id-") - 1);
+    let phone_id = review_id.slice((review_id.indexOf("phone_id-") + "phone_id-".length), review_id.indexOf("submission-") - 1);
+    let submission_date_time = review_id.slice((review_id.indexOf("submission-") + "submission-".length));
+    current_btn.addEventListener("click", function () {
+      let review = document.getElementById(review_id);
+      review.innerHTML = "Deleting..."
+      $.post("/delete-review", { username: username, phone_id: phone_id, submission_date_time: submission_date_time }, function (data, status) {
+        if (status == "success") {
+          review.remove();
+        }
+        else {
+          review.innerHTML = "Could not delete. Please refresh the page and try again.";
+        }
       });
     });
   }
-  </script>
+
+  // favourite feature
+  let non_fav_heart_icon = "<svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' fill='currentColor' class='bi bi-heart' viewBox='0 0 16 16'><path d='m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z'/></svg>";
+  let fav_heart_icon = "<svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' fill='currentColor' class='bi bi-heart-fill' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z'/></svg>";
+  let fav_btns = document.querySelectorAll(".fav_btn");  // get all buttons
+
+  for (let i = 0; i < fav_btns.length; i++)  // for each button
+  {
+    let current_btn = fav_btns[i];
+    let phone_id = current_btn.id.slice("phoneid-".length);
+    current_btn.addEventListener("click", function () {
+      let btn_content = current_btn.innerHTML
+      let is_fav = btn_content.includes("bi-heart-fill") ? true : false;
+      console.log("is_fav: " + is_fav)
+      $.post("/favouriteify_phone", { phone_id: phone_id, is_favourite: is_fav }, function (data, status) {
+        if (is_fav) // if currently button was favourite-d, un favourite it
+        {
+          document.getElementById("phoneid-" + phone_id).innerHTML = non_fav_heart_icon;
+        }
+        else {
+          document.getElementById("phoneid-" + phone_id).innerHTML = fav_heart_icon;
+        }
+      });
+    });
+  }
+</script>
 
 {% endblock %}

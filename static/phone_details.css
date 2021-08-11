@@ -92,4 +92,8 @@ table {
     border-radius: 20%;
   }
 
+  .fav_btn
+  {
+    float: right; background-color: transparent; border: none;
+  }
   

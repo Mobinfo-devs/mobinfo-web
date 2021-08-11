@@ -8,6 +8,11 @@
 
 
 {% block body %}
+{{
+   admin_component(type="add",
+   text='Add new phone',
+   route="/phones/add")
+}}
 <h1 style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: min-content;"> Phones </h1>
 <p> Click on any phone to know more about it. </p>
 <hr>
@@ -27,11 +32,6 @@
 
 </section>
 
-{{
-   admin_component(type="add",
-   text='Add new phone',
-   route="/phones/add")
-}}
 {% endblock %}
 
 <!-- https://logos-download.com/6609-xiaomi-logo-download.html -->
