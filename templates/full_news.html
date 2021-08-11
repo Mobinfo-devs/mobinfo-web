@@ -1,0 +1,19 @@
+
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='full_news.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="news">
+    <h1> {{ news["heading"] }} </h1>
+    <div class="news_image">
+        <img src= {{ news["image_url"] }} style="width: 300px;">
+    </div>
+    <p> {{ news["news_text"] }} </p>
+</div>
+
+
+</div>
+{% endblock %}

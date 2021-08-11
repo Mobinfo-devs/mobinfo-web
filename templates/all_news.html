@@ -8,14 +8,20 @@
 
 
 {% block body %}
-<h1 style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: min-content;"> Brands </h1>
-<p> Click on any brand to know more about it. </p>
+{{
+   admin_component(type="add",
+   text='Add news',
+   route="/news/add")
+}}
+
+<h1 style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: min-content;"> News </h1>
+<p> Click on any news to know more. </p>
 <hr>
 
 <section class="news-grid">
 
    {% for article in news %}
-   <a href = "#">
+   <a href = {{ '/news/' + '_'.join(article['heading'].split()) + '-' + article['id']|string}}>
       <div class = "newscard">
          <h3> {{ article["heading"] }} </h3>
          <div class = newscardimage>
@@ -28,11 +34,7 @@
 
 </section>
 
-{{
-   admin_component(type="add",
-   text='Add new brand',
-   route="/brands/add")
-}}
+
 
 {% endblock %}
 

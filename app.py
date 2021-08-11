@@ -867,18 +867,57 @@ def review_add(brand_phone_id):
 @app.route("/news")
 def all_news():
     db.execute("""
-    SELECT heading, image_url, CONCAT(SUBSTRING(news_text, 1, 500), ".....") AS news_text
-    FROM news;""")
+    SELECT heading, image_url, CONCAT(SUBSTRING(news_text, 1, 300), ".....") AS news_text, id
+    FROM news
+    ORDER BY news_date_time DESC;""")
     db_result = db.fetchall()
     news = []
     for row in db_result:
         news.append({
             "heading": row[0],
             "image_url": row[1],
-            "news_text": row[2]
+            "news_text": row[2],
+            "id": row[3]
         })
     return render_template("all_news.html", news=news)
-        
+
+
+@app.route("/news/add", methods = ["GET", "POST"])
+def add_news():
+    if request.method == "GET":
+        return render_template("add_news.html", title="Add News")
+    
+    else:  # request method == POST
+        heading = request.form.get("heading").strip()
+        image_url = request.form.get("image_url").strip()
+        news_text = request.form.get("news_text").strip()
+        db.execute("""
+        INSERT INTO news (heading, image_url, news_text)
+        VALUES (%s, %s, %s);""",
+        (heading, image_url, news_text))
+        db_connection.commit()
+        return redirect("/news")
+
+
+
+@app.route("/news/<heading_id>")
+def full_news(heading_id):
+    news_id = int(heading_id[ heading_id.find("-") + 1 : ])
+    db.execute("""
+    SELECT heading, image_url, news_text, id
+    FROM news
+    WHERE id = %s;""",
+    (news_id, ))
+    db_result = db.fetchone()
+    news = {
+            "heading": db_result[0],
+            "image_url": db_result[1],
+            "news_text": db_result[2],
+            "id": db_result[3]
+        }
+
+    return render_template("full_news.html", news=news)  
+
 
 @app.route("/delete-review", methods=["POST"])
 def delete_review():

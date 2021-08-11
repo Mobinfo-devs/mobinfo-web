@@ -1,0 +1,28 @@
+
+{% extends "layout.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h2> Add News </h2>
+
+<form action="/news/add" method="POST">
+    <label for="heading">Heading* </label> <br>
+    <textarea  required name="heading" cols="100" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+    <br> <br>
+
+    <label for="image_url">News Image URL</label> <br>
+    <textarea name="image_url" cols="100" rows="1"></textarea>
+    <br> <br>
+
+    <label for="news_text">News text: </label> <br>
+    <textarea name="news_text" cols="100" rows="20" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+
+    <br> <br>
+
+    <br><br>
+    <input type="submit" value="Save">
+</form>
+
+{% endblock %}
