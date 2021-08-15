@@ -2,6 +2,7 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='phones.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -35,6 +36,49 @@
 <span class="dot" onclick="currentSlide(2)"></span>
 <span class="dot" onclick="currentSlide(3)"></span>
 </div>
+
+
+<section class="brands-grid"> 
+
+    <a href="/phones/Apple_iPhone_12_Pro_Max-23">
+        <div class="brandcard">
+           <h5> Apple iPhone 12 Pro Max </h5>
+           <div class="brandcardimage">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/apple-iphone-12-pro-max-.jpg">
+           </div>
+        </div>
+     </a>
+
+     <a href="/phones/Xiaomi_Redmi_Note_10_Pro_8GB-37">
+        <div class="brandcard">
+           <h5> Xiaomi Redmi Note 10 Pro 8GB </h5>
+           <div class="brandcardimage">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/xiaomi-redmi-note10-pro.jpg">
+           </div>
+        </div>
+     </a>
+
+     <a href="/phones/Samsung_Galaxy_S21_Ultra-8">
+        <div class="brandcard">
+           <h5> Samsung Galaxy S21 Ultra </h5>
+           <div class="brandcardimage">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/samsung-galaxy-s21-ultra-5g-.jpg">
+           </div>
+        </div>
+     </a>
+     <a href="/phones/Huawei_Y9a-14">
+        <div class="brandcard">
+           <h5> Huawei Y9a </h5>
+           <div class="brandcardimage">
+              <img src="https://fdn2.gsmarena.com/vv/bigpic/huawei-y9a.jpg">
+           </div>
+        </div>
+     </a>
+     
+
+
+ 
+ </section>
 
 
 <script>
