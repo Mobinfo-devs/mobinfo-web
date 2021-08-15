@@ -31,10 +31,6 @@ Session(app)
 
 @app.route("/")
 def index():
-    flash("Success", "success")
-    flash("message", "message")
-    flash("ERROR", "error")
-    flash("flash")
     return render_template("index.html", title="Mobinfo")
 
 
