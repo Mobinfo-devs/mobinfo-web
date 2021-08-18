@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='phones.css') }}">
+{% endblock %}
+
+
+{% block body %}
+<h1 style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: max-content;"> Your favourite phones </h1>
+{% if not phones %}
+<p> You have not liked any phone yet. </p>
+{% else %}
+<p> Here are the phones that you have liked. Click on any phone to know more about it. </p>
+<hr>
+
+<section class="brands-grid"> 
+
+   {% for phone in phones %}
+   <a href = "/phones/{{ '_'.join(phone['brand_name'].split())  + '_' + '_'.join(phone['name'].split())}}-{{ phone['id'] }}">
+      <div class = "brandcard">
+         <h5> {{ phone["brand_name"] + " " + phone["name"] }} </h5>
+         <div class = brandcardimage>
+            <img src = {{ phone["image_url"] }} >
+         </div>
+      </div>
+   </a>
+   {% endfor %}
+
+</section>
+{% endif %}
+
+{% endblock %}
+
+<!-- https://logos-download.com/6609-xiaomi-logo-download.html -->

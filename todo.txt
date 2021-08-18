@@ -17,11 +17,11 @@
 ! Delete brand feature (on edit brand page) (DONE)
     > give warning that all phones of the brand will be yeeted too (DONE)
 
-! News
+! News 
     a) collect news (how? add to excel first?)
         > heading, text, image
 
-    b) html page for all news
+    b) html page for all news 
         > somewhat like brands.html but each news on one line?
 
     c) html page for specific news 
@@ -32,8 +32,9 @@
         >show option to delete a review (mayyyyybee edit? nah? maybe??)  (DONE)
     b) add option to add review if logged in (DONE)
 
-! feature of liking phones
-    a) heart button...
+! feature of liking phones (DONE)
+    a) heart button... (DONE)
 
+! favourite phones page
 
 ! search and filters on phones page

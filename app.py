@@ -235,6 +235,27 @@ def phones():
 
     return render_template("phones.html", phones=phones, title="Phones")
 
+@app.route("/phones/favourites")
+def fav_phones():
+    if not session.get("user_name"):
+        return "Error, Not signed in. Please <a href='signin'> Sign In </a>"
+
+    db.execute(f"""
+    SELECT phone.brand_name, phone.name, phone.image_url, phone.id
+    FROM phone JOIN favourite
+    ON phone.id = favourite.phone_id
+    WHERE username = %s
+    ORDER BY phone.name;
+    """, 
+    (session.get("user_name"), )) 
+    db_result = db.fetchall()
+    phones = []
+    for row in db_result:
+        phones.append(
+            {"brand_name": row[0], "name": row[1], "image_url": row[2], "id": row[3]})
+
+    return render_template("favourite_phones.html", phones=phones, title="Phones")
+
 
 @app.route("/phones/add", methods=["POST", "GET"])
 def phone_add():
