@@ -1,4 +1,4 @@
-{% from 'layout.html' import admin_component  %}
+{% from 'layout.html' import admin_component %}
 
 {% extends "layout.html" %}
 
@@ -13,9 +13,14 @@
 <div class="brand_details">
     <h1> {{ brand_name }} </h1>
     <div class="brand_image">
-        <img src= {{ brand_logo_url }} style="width: 300px;">
+        <img src={{ brand_logo_url }} style="width: 300px;">
     </div>
     <p> {{ brand_description }} </p>
+
+    <div class="brand_phones">
+        <i> Click <a style="color: black; text-decoration: underline;" href={{'/phones?brand=' + '
+                +'.join(brand_name.split()) }}> here</a> to see all phones of {{ brand_name }} </i>
+    </div>
 </div>
 
 

@@ -8,8 +8,8 @@
     align-items: center;
     text-align: center;
     /* background: #353535; */
-    border: 3px solid hsl(194, 60%, 34%);
-    background: hsla(150, 60%, 34%, 0.199);
+    border: 3px solid hsl(150, 60%, 34%);
+    background: hsla(150, 60%, 34%, 0.3);
     /* font-size: 1rem; */
     color:hsl(194, 60%, 34%);
     box-shadow: rgba(3, 8, 20, 0.1) 0px 0.15rem 0.5rem, rgba(2, 8, 20, 0.1) 0px 0.075rem 0.175rem;

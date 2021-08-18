@@ -223,17 +223,48 @@ def brand_delete(brand_name):
 
 @app.route("/phones")
 def phones():
+    db.execute(f"""SELECT name FROM brand;""")
+    brand_names = [row[0] for row in db.fetchall()]
+
+    # making up where clauses depending on filters
+    where_clauses = []
+    db_args = tuple()
+    if brand := request.args.get("brand"):
+        where_clauses.append("phone.brand_name = %s")
+        db_args += (brand, )
+    if battery := request.args.get("battery"):
+        where_clauses.append("phone.battery_capacity_mah >= %s")
+        db_args += (int(battery), )
+    if camera := request.args.get("camera"):
+        camera_filter = True
+        where_clauses.append("camera.megapixels >= %s")
+        db_args += (int(camera), )
+    else:
+        camera_filter = False
+    if built_in_memory := request.args.get("built_in_memory"):
+        where_clauses.append("phone.built_in_memory_GB >= %s")
+        db_args += (int(built_in_memory), )
+    if ram := request.args.get("ohone.ram"):
+        where_clauses.append("phone.RAM_GB >= %s")
+        db_args += (int(ram), )
+    if where_clauses:
+        where_clauses = f"WHERE {' AND '.join(where_clauses)}"
+
+    # SELECT phone.name, camera.megapixels FROM phone INNER JOIN phone_camera ON phone.id = phone_camera.phone_id INNER JOIN camera on phone_camera.camera_id = camera.id;
     db.execute(f"""
-    SELECT brand_name, name, image_url, id FROM phone
-    ORDER BY name;
-    """)
+    SELECT DISTINCT phone.brand_name, phone.name, phone.image_url, phone.id 
+    FROM phone
+    {"INNER JOIN phone_camera phone_camera ON phone.id = phone_camera.phone_id INNER JOIN camera on phone_camera.camera_id = camera.id" if camera else ""}
+    {where_clauses if where_clauses else ""}
+    ORDER BY phone.name;
+    """, db_args)
     db_result = db.fetchall()
     phones = []
     for row in db_result:
         phones.append(
             {"brand_name": row[0], "name": row[1], "image_url": row[2], "id": row[3]})
 
-    return render_template("phones.html", phones=phones, title="Phones")
+    return render_template("phones.html", phones=phones, brands=brand_names, title="Phones")
 
 @app.route("/phones/favourites")
 def fav_phones():

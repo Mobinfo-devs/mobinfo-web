@@ -35,6 +35,6 @@
 ! feature of liking phones (DONE)
     a) heart button... (DONE)
 
-! favourite phones page
+! favourite phones page (DONE)
 
 ! search and filters on phones page

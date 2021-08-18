@@ -6,12 +6,14 @@
 
 
 header {
-  background-color: hsl(194, 60%, 34%);
+  /* background-color: hsl(194, 60%, 34%); */
   /* height: 75px; */
   /* display: flex; */
   /* align-items: center; */
   border-radius: 5px;
   padding: 5px;
+  background: rgb(35,114,139);
+  background: linear-gradient(180deg, rgba(35,114,139,1) 0%, #0a3642 80%);
 }
 
 header ul {
@@ -38,12 +40,13 @@ header h1 {
 }
 
 footer {
-  background-color: hsl(194, 60%, 34%);
+  background: rgb(35,114,139);
+  background: linear-gradient(0deg, rgba(35,114,139,1) 0%, #0a3642 80%);
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   color: white;
   text-align: center;
-  border-radius: 5%;
+  border-radius: 5px;
   margin-top: 2em;
 }
 

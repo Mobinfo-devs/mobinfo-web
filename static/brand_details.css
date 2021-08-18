@@ -15,7 +15,7 @@
 .brand_image
 {
     height: 390px;
-    background: hsla(150, 60%, 34%, 0.199);
+    background: hsla(150, 60%, 34%, 0.6);
     position: relative;
     border-radius: 5px;
 }
@@ -26,4 +26,13 @@
     top: 50%; left: 50%;
     transform: translate(-50%,-50%);
     border-radius: 5px;
+}
+
+.brand_phones
+{
+    padding: 2px;
+    width: max-content;
+    background-color: hsla(150, 60%, 34%, 0.199);
+    border-radius: 5px;
+    border: 2px solid hsl(150, 60%, 34%);
 }

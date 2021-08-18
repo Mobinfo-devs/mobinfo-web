@@ -1,4 +1,4 @@
-{% from 'layout.html' import admin_component  %}
+{% from 'layout.html' import admin_component %}
 
 {% extends "layout.html" %}
 
@@ -9,28 +9,99 @@
 
 {% block body %}
 {{
-   admin_component(type="add",
-   text='Add new phone',
-   route="/phones/add")
+admin_component(type="add",
+text='Add new phone',
+route="/phones/add")
 }}
-<h1 style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: min-content;"> Phones </h1>
+<h1
+   style="background-color: hsl(194, 60%, 34%);; color: white; margin-left: 5px; padding-left: 10px; padding-right: 10px; border-radius: 5px; width: min-content;">
+   Phones </h1>
 <p> Click on any phone to know more about it. </p>
 <hr>
 
-<section class="brands-grid"> 
+<button onclick="toggleFilters()"> Filters &#9660; </button>
+<div id="filters" hidden>
+   <form action="/phones" method="GET">
+
+      <label for="brand">Brand </label> <br>
+      <select name="brand">
+         <option selected value="">Select</option>
+         {% for brand in brands %}
+         <option value="{{ brand }}">{{ brand }}</option>
+         {% endfor %}
+      </select>
+      <br><br>
+
+      <label for="battery">Battery Capacity </label> <br>
+      <select name="battery">
+         <option selected value="">Select</option>
+         <option value="3000">3000 mAh and above</option>
+         <option value="4000">4000 mAh and above</option>
+         <option value="5000">5000 mAh and above</option>
+      </select>
+      <br><br>
+
+      <label for="camera">Camera </label> <br>
+      <select name="camera">
+         <option selected value="">Select</option>
+         <option value="8">8 MP and above</option>
+         <option value="12">12 MP and above</option>
+         <option value="20">20 MP and above</option>
+         <option value="48">48 MP and above</option>
+         <option value="64">64 MP and above</option>
+      </select>
+      <br><br>
+
+      <label for="built_in_memory">Built in memory </label> <br>
+      <select name="built_in_memory">
+         <option selected value="">Select</option>
+         <option value="32">32 GB and above</option>
+         <option value="64">64 GB and above</option>
+         <option value="128">128 GB and above</option>
+      </select>
+      <br><br>
+
+      <label for="ram">RAM </label> <br>
+      <select name="ram">
+         <option selected value="">Select</option>
+         <option value="3">3 GB and above</option>
+         <option value="4">4 GB and above</option>
+         <option value="6">6 GB and above</option>
+         <option value="8">8 GB and above</option>
+      </select>
+      <br><br>
+
+      <input type="submit" value="Search">
+   </form>
+</div>
+
+<section class="brands-grid">
 
    {% for phone in phones %}
-   <a href = "/phones/{{ '_'.join(phone['brand_name'].split())  + '_' + '_'.join(phone['name'].split())}}-{{ phone['id'] }}">
-      <div class = "brandcard">
+   <a
+      href="/phones/{{ '_'.join(phone['brand_name'].split())  + '_' + '_'.join(phone['name'].split())}}-{{ phone['id'] }}">
+      <div class="brandcard">
          <h5> {{ phone["brand_name"] + " " + phone["name"] }} </h5>
-         <div class = brandcardimage>
-            <img src = {{ phone["image_url"] }} >
+         <div class=brandcardimage>
+            <img src={{ phone["image_url"] }}>
          </div>
       </div>
    </a>
    {% endfor %}
 
 </section>
+
+<script>
+   function toggleFilters() {
+      let filters_div = document.getElementById("filters");
+      if (filters_div.style.display === "none") {
+         filters_div.style.display = "block";
+      }
+      else {
+         filters_div.style.display = "none";
+      }
+   }
+</script>
 
 {% endblock %}
 

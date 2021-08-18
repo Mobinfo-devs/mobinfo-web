@@ -1,9 +1,10 @@
 h2
 {
     text-align: center;
-    background-color: hsl(194, 60%, 34%);
+    background-color: #0a3642;
     color: white;
-    border-radius: 5px;
+    border-radius: 10px;
+    /* color: #23728b; */
 }
 
 * {box-sizing:border-box}
