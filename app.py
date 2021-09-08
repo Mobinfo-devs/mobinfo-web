@@ -68,7 +68,7 @@ def signup():
         # checking if both passwords match
         if password != confirm_password:
             flash("Passwords don't match", "error")
-            return render_template("signup.html", title="signup")
+            return render_template("signup.html", title="Sign Up")
 
         db.execute("""
         INSERT INTO user (username, firstname, lastname, password_hash, is_admin)
@@ -178,7 +178,7 @@ def brand_details(brand_name):
     if not db_result:
         return "Brand not found."
 
-    return render_template("brand_details.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
+    return render_template("brand_details.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2], title=f"Brands - {brand_name}")
 
 
 @app.route("/brands/<brand_name>/edit", methods=["POST", "GET"])
@@ -193,7 +193,7 @@ def brand_edit(brand_name):
         if not db_result:
             return "Brand not found!"
         else:
-            return render_template("edit_brand.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2])
+            return render_template("edit_brand.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2], title=f"Edit Brand - {brand_name}")
 
     else:  # method == POST
         brand_description = request.form.get("brand_description")  # or ""
@@ -942,7 +942,7 @@ def all_news():
             "news_text": row[2],
             "id": row[3]
         })
-    return render_template("all_news.html", news=news)
+    return render_template("all_news.html", news=news, title="News")
 
 
 @app.route("/news/add", methods = ["GET", "POST"])
@@ -979,7 +979,7 @@ def full_news(heading_id):
             "id": db_result[3]
         }
 
-    return render_template("full_news.html", news=news)  
+    return render_template("full_news.html", news=news, title=f"News - {news['heading']}")  
 
 
 @app.route("/delete-review", methods=["POST"])
