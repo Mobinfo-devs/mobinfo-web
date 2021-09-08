@@ -244,7 +244,7 @@ def phones():
     if built_in_memory := request.args.get("built_in_memory"):
         where_clauses.append("phone.built_in_memory_GB >= %s")
         db_args += (int(built_in_memory), )
-    if ram := request.args.get("ohone.ram"):
+    if ram := request.args.get("ram"):
         where_clauses.append("phone.RAM_GB >= %s")
         db_args += (int(ram), )
     if where_clauses:
