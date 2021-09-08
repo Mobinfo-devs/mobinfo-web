@@ -982,6 +982,20 @@ def full_news(heading_id):
     return render_template("full_news.html", news=news, title=f"News - {news['heading']}")  
 
 
+@app.route("/news/<heading_id>/delete")
+def news_delete(heading_id):
+    news_id = int(heading_id[ heading_id.find("-") + 1 : ])
+    news_heading = heading_id[ : heading_id.find("-")]
+    db.execute(""" 
+    DELETE FROM news
+    WHERE id = %s""",
+    (news_id, ))
+    db_connection.commit()
+    flash(f"Successfully deleted news with heading '{news_heading}'", "success")
+    return redirect("/news")
+
+    
+
 @app.route("/delete-review", methods=["POST"])
 def delete_review():
     username = request.form.get("username")

@@ -1,4 +1,4 @@
-
+{% from 'layout.html' import admin_component %}
 {% extends "layout.html" %}
 
 {% block head %}
@@ -14,6 +14,11 @@
     <p> {{ news["news_text"] }} </p>
 </div>
 
+{{
+    admin_component(type="delete",
+    text='Delete',
+    route = '/news/' + '_'.join(news['heading'].split()) + '-' + news['id']|string + '/delete')
+}} 
 
 </div>
 {% endblock %}
