@@ -137,9 +137,6 @@ route="/phones/" + '_'.join(phone_details['brand_name'].split()) + '_' + '_'.joi
 
 
 <h2> Reviews </h2>
-{% if not reviews %}
-<h4> No reviews for this phone yet. </h4>
-{% else %}
 
 {% if session.user_name %}
 <a href={{ '/phones/' + '_' .join(phone_details['brand_name'].split()) + '_' + '_'
@@ -151,6 +148,10 @@ route="/phones/" + '_'.join(phone_details['brand_name'].split()) + '_' + '_'.joi
   </div>
 </a>
 {% endif %}
+
+{% if not reviews %}
+<h4> No reviews for this phone yet. </h4>
+{% else %}
 
 <div class="reviews">
   {% for review in reviews %}
