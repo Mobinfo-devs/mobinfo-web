@@ -1,10 +1,9 @@
-from os import getenv
-import re
 import traceback
+from os import getenv
+
 import mysql.connector
 from flask import Flask, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
-from time import strptime, strftime
 
 from flask_session import Session
 from helper import signin_user, signout_user
@@ -20,10 +19,6 @@ db = db_connection.cursor(buffered=True)
 
 app = Flask(__name__)
 app.secret_key = "35gbbad932565nnssndg"
-# app.config.update(
-#     DEBUG=True,
-#     TEMPLATES_AUTO_RELOAD=True
-# )
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
@@ -178,7 +173,16 @@ def brand_details(brand_name):
     if not db_result:
         return "Brand not found."
 
-    return render_template("brand_details.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2], title=f"Brands - {brand_name}")
+    # get marketshare
+    db.execute("""SELECT share_percentage, year, quarter
+    FROM marketshare
+    WHERE brand_name = %s
+    ORDER BY year ASC, quarter ASC;
+    """, (brand_name, ))
+    marketshares = db.fetchall()
+    print(marketshares)
+
+    return render_template("brand_details.html", brand_name=db_result[0], brand_logo_url=db_result[1], brand_description=db_result[2], title=f"Brands - {brand_name}", marketshares=marketshares)
 
 
 @app.route("/brands/<brand_name>/edit", methods=["POST", "GET"])
@@ -994,7 +998,6 @@ def news_delete(heading_id):
     flash(f"Successfully deleted news with heading '{news_heading}'", "success")
     return redirect("/news")
 
-    
 
 @app.route("/delete-review", methods=["POST"])
 def delete_review():
@@ -1023,6 +1026,8 @@ def favouriteify_phone():
                    (session.get("user_name"), phone_id))
     db_connection.commit()
     return ""
+
+    
 # @app.errorhandler(404)
 # def not_found_error(error):
 #     return render_template('404.html', pic=pic), 404
