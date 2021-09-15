@@ -17,12 +17,33 @@
     </div>
     <p> {{ brand_description }} </p>
 
+    {% if marketshares %}
+    <div class="marketshare">
+        <h3> Marketshare Information</h3>
+
+        <table>
+            <thead>
+                {% for row in marketshares %}
+                <th> {{ row[1] }} Quarter {{ row[2] }} </th>
+                {% endfor %}
+            </thead>
+            <tbody>
+                <tr>
+                    {% for row in marketshares %}
+                        <td> {{ row[0] }}% </td>
+                    {% endfor%}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
     <div class="brand_phones">
         <i> Click <a style="color: black; text-decoration: underline;" href={{'/phones?brand=' + '
                 +'.join(brand_name.split()) }}> here</a> to see all phones of {{ brand_name }} </i>
     </div>
+    <!-- {{ marketshares }} -->
 </div>
 
 
-</div>
 {% endblock %}

@@ -36,3 +36,26 @@
     border-radius: 5px;
     border: 2px solid hsl(150, 60%, 34%);
 }
+
+.marketshare
+{
+    margin: 7px;
+}
+
+th, td
+{
+    border: 2px solid black;
+    padding: 5px;
+}
+
+thead
+{
+    background-color: hsla(150, 60%, 34%, 0.5);
+}
+
+
+table
+{
+    border-collapse: collapse;
+    text-align: center;
+}
